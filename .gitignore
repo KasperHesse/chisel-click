@@ -341,3 +341,5 @@ hs_err_pid*
 
 # Generated files
 gen
+*/sim_build
+*/results.xml

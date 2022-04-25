@@ -1,0 +1,41 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Mon Apr 25 13:15:43 2022
+[*]
+[dumpfile] "C:\Users\kaspe\git\chisel-click\src\test\python\tests\fork\dump.vcd"
+[dumpfile_mtime] "Mon Apr 25 13:15:33 2022"
+[dumpfile_size] 965
+[savefile] "C:\Users\kaspe\git\chisel-click\src\test\python\tests\fork\Config.gtkw"
+[timestart] 0
+[size] 1000 600
+[pos] -1 -1
+*-11.037737 2614 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] Fork.
+[sst_width] 211
+[signals_width] 166
+[sst_expanded] 1
+[sst_vpaned_height] 154
+@28
+Fork.reset
+Fork.io_in_req
+Fork.io_in_ack
+@22
+Fork.io_in_data[7:0]
+@200
+-Out1
+@28
+Fork.io_out1_req
+Fork.io_out1_ack
+@22
+Fork.io_out1_data[7:0]
+@200
+-Out2
+@28
+Fork.io_out2_req
+Fork.io_out2_ack
+@22
+Fork.io_out2_data[7:0]
+@28
+Fork.phase_io_reset
+[pattern_trace] 1
+[pattern_trace] 0

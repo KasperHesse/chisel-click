@@ -1,0 +1,1129 @@
+$date
+	Mon Apr 25 15:03:05 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module Fifo $end
+$var wire 1 ! delays_0_reqIn $end
+$var wire 1 " delays_1_reqIn $end
+$var wire 1 # delays_2_reqIn $end
+$var wire 1 $ delays_3_reqIn $end
+$var wire 1 % io_in_ack $end
+$var wire 8 & io_in_data [7:0] $end
+$var wire 1 ' io_in_req $end
+$var wire 1 ( io_out_ack $end
+$var wire 8 ) io_out_data [7:0] $end
+$var wire 1 * io_out_req $end
+$var wire 1 + io_reset $end
+$var wire 8 , stages_0_io_in_data [7:0] $end
+$var wire 1 - stages_0_io_in_req $end
+$var wire 1 . stages_0_io_out_ack $end
+$var wire 1 / stages_0_io_reset $end
+$var wire 8 0 stages_1_io_in_data [7:0] $end
+$var wire 1 1 stages_1_io_in_req $end
+$var wire 1 2 stages_1_io_out_ack $end
+$var wire 1 3 stages_1_io_reset $end
+$var wire 8 4 stages_2_io_in_data [7:0] $end
+$var wire 1 5 stages_2_io_in_req $end
+$var wire 1 6 stages_2_io_out_ack $end
+$var wire 1 7 stages_2_io_reset $end
+$var wire 8 8 stages_3_io_in_data [7:0] $end
+$var wire 1 9 stages_3_io_in_req $end
+$var wire 1 : stages_3_io_out_ack $end
+$var wire 1 ; stages_3_io_reset $end
+$var wire 8 < stages_4_io_in_data [7:0] $end
+$var wire 1 = stages_4_io_in_req $end
+$var wire 1 > stages_4_io_out_ack $end
+$var wire 1 ? stages_4_io_reset $end
+$var wire 1 @ stages_4_io_out_req $end
+$var wire 8 A stages_4_io_out_data [7:0] $end
+$var wire 1 B stages_4_io_in_ack $end
+$var wire 1 C stages_3_io_out_req $end
+$var wire 8 D stages_3_io_out_data [7:0] $end
+$var wire 1 E stages_3_io_in_ack $end
+$var wire 1 F stages_2_io_out_req $end
+$var wire 8 G stages_2_io_out_data [7:0] $end
+$var wire 1 H stages_2_io_in_ack $end
+$var wire 1 I stages_1_io_out_req $end
+$var wire 8 J stages_1_io_out_data [7:0] $end
+$var wire 1 K stages_1_io_in_ack $end
+$var wire 1 L stages_0_io_out_req $end
+$var wire 8 M stages_0_io_out_data [7:0] $end
+$var wire 1 N stages_0_io_in_ack $end
+$var wire 1 O delays_3_reqOut $end
+$var wire 1 P delays_2_reqOut $end
+$var wire 1 Q delays_1_reqOut $end
+$var wire 1 R delays_0_reqOut $end
+$scope module delays_0 $end
+$var wire 1 ! reqIn $end
+$var reg 1 R reqOut $end
+$upscope $end
+$scope module delays_1 $end
+$var wire 1 " reqIn $end
+$var reg 1 Q reqOut $end
+$upscope $end
+$scope module delays_2 $end
+$var wire 1 # reqIn $end
+$var reg 1 P reqOut $end
+$upscope $end
+$scope module delays_3 $end
+$var wire 1 $ reqIn $end
+$var reg 1 O reqOut $end
+$upscope $end
+$scope module stages_0 $end
+$var wire 1 S click_io_ackOut $end
+$var wire 1 T click_io_reqIn $end
+$var wire 1 U click_io_reset $end
+$var wire 1 N io_in_ack $end
+$var wire 8 V io_in_data [7:0] $end
+$var wire 1 - io_in_req $end
+$var wire 1 . io_out_ack $end
+$var wire 8 W io_out_data [7:0] $end
+$var wire 1 L io_out_req $end
+$var wire 1 / io_reset $end
+$var wire 1 X reg__io_clock $end
+$var wire 8 Y reg__io_in [7:0] $end
+$var wire 1 Z reg__io_reset $end
+$var wire 8 [ reg__io_out [7:0] $end
+$var wire 1 \ click_io_reqOut $end
+$var wire 1 ] click_io_click $end
+$var wire 1 ^ click_io_ackIn $end
+$scope module click $end
+$var wire 1 _ Pi_io_clock $end
+$var wire 1 ` Pi_io_in $end
+$var wire 1 a Pi_io_reset $end
+$var wire 1 b Po_io_clock $end
+$var wire 1 c Po_io_in $end
+$var wire 1 d Po_io_reset $end
+$var wire 1 ^ io_ackIn $end
+$var wire 1 S io_ackOut $end
+$var wire 1 ] io_click $end
+$var wire 1 T io_reqIn $end
+$var wire 1 \ io_reqOut $end
+$var wire 1 U io_reset $end
+$var wire 1 e Po_io_out $end
+$var wire 1 f Pi_io_out $end
+$scope module Pi $end
+$var wire 1 _ io_clock $end
+$var wire 1 ` io_in $end
+$var wire 1 a io_reset $end
+$var wire 1 f io_out $end
+$var reg 1 f io_out_REG $end
+$upscope $end
+$scope module Po $end
+$var wire 1 b io_clock $end
+$var wire 1 c io_in $end
+$var wire 1 d io_reset $end
+$var wire 1 e io_out $end
+$var reg 1 e io_out_REG $end
+$upscope $end
+$upscope $end
+$scope module reg_ $end
+$var wire 1 X io_clock $end
+$var wire 8 g io_in [7:0] $end
+$var wire 1 Z io_reset $end
+$var wire 8 h io_out [7:0] $end
+$var reg 8 i io_out_REG [7:0] $end
+$upscope $end
+$upscope $end
+$scope module stages_1 $end
+$var wire 1 j click_io_ackOut $end
+$var wire 1 k click_io_reqIn $end
+$var wire 1 l click_io_reset $end
+$var wire 1 K io_in_ack $end
+$var wire 8 m io_in_data [7:0] $end
+$var wire 1 1 io_in_req $end
+$var wire 1 2 io_out_ack $end
+$var wire 8 n io_out_data [7:0] $end
+$var wire 1 I io_out_req $end
+$var wire 1 3 io_reset $end
+$var wire 1 o reg__io_clock $end
+$var wire 8 p reg__io_in [7:0] $end
+$var wire 1 q reg__io_reset $end
+$var wire 8 r reg__io_out [7:0] $end
+$var wire 1 s click_io_reqOut $end
+$var wire 1 t click_io_click $end
+$var wire 1 u click_io_ackIn $end
+$scope module click $end
+$var wire 1 v Pi_io_clock $end
+$var wire 1 w Pi_io_in $end
+$var wire 1 x Pi_io_reset $end
+$var wire 1 y Po_io_clock $end
+$var wire 1 z Po_io_in $end
+$var wire 1 { Po_io_reset $end
+$var wire 1 u io_ackIn $end
+$var wire 1 j io_ackOut $end
+$var wire 1 t io_click $end
+$var wire 1 k io_reqIn $end
+$var wire 1 s io_reqOut $end
+$var wire 1 l io_reset $end
+$var wire 1 | Po_io_out $end
+$var wire 1 } Pi_io_out $end
+$scope module Pi $end
+$var wire 1 v io_clock $end
+$var wire 1 w io_in $end
+$var wire 1 x io_reset $end
+$var wire 1 } io_out $end
+$var reg 1 } io_out_REG $end
+$upscope $end
+$scope module Po $end
+$var wire 1 y io_clock $end
+$var wire 1 z io_in $end
+$var wire 1 { io_reset $end
+$var wire 1 | io_out $end
+$var reg 1 | io_out_REG $end
+$upscope $end
+$upscope $end
+$scope module reg_ $end
+$var wire 1 o io_clock $end
+$var wire 8 ~ io_in [7:0] $end
+$var wire 1 q io_reset $end
+$var wire 8 !" io_out [7:0] $end
+$var reg 8 "" io_out_REG [7:0] $end
+$upscope $end
+$upscope $end
+$scope module stages_2 $end
+$var wire 1 #" click_io_ackOut $end
+$var wire 1 $" click_io_reqIn $end
+$var wire 1 %" click_io_reset $end
+$var wire 1 H io_in_ack $end
+$var wire 8 &" io_in_data [7:0] $end
+$var wire 1 5 io_in_req $end
+$var wire 1 6 io_out_ack $end
+$var wire 8 '" io_out_data [7:0] $end
+$var wire 1 F io_out_req $end
+$var wire 1 7 io_reset $end
+$var wire 1 (" reg__io_clock $end
+$var wire 8 )" reg__io_in [7:0] $end
+$var wire 1 *" reg__io_reset $end
+$var wire 8 +" reg__io_out [7:0] $end
+$var wire 1 ," click_io_reqOut $end
+$var wire 1 -" click_io_click $end
+$var wire 1 ." click_io_ackIn $end
+$scope module click $end
+$var wire 1 /" Pi_io_clock $end
+$var wire 1 0" Pi_io_in $end
+$var wire 1 1" Pi_io_reset $end
+$var wire 1 2" Po_io_clock $end
+$var wire 1 3" Po_io_in $end
+$var wire 1 4" Po_io_reset $end
+$var wire 1 ." io_ackIn $end
+$var wire 1 #" io_ackOut $end
+$var wire 1 -" io_click $end
+$var wire 1 $" io_reqIn $end
+$var wire 1 ," io_reqOut $end
+$var wire 1 %" io_reset $end
+$var wire 1 5" Po_io_out $end
+$var wire 1 6" Pi_io_out $end
+$scope module Pi $end
+$var wire 1 /" io_clock $end
+$var wire 1 0" io_in $end
+$var wire 1 1" io_reset $end
+$var wire 1 6" io_out $end
+$var reg 1 6" io_out_REG $end
+$upscope $end
+$scope module Po $end
+$var wire 1 2" io_clock $end
+$var wire 1 3" io_in $end
+$var wire 1 4" io_reset $end
+$var wire 1 5" io_out $end
+$var reg 1 5" io_out_REG $end
+$upscope $end
+$upscope $end
+$scope module reg_ $end
+$var wire 1 (" io_clock $end
+$var wire 8 7" io_in [7:0] $end
+$var wire 1 *" io_reset $end
+$var wire 8 8" io_out [7:0] $end
+$var reg 8 9" io_out_REG [7:0] $end
+$upscope $end
+$upscope $end
+$scope module stages_3 $end
+$var wire 1 :" click_io_ackOut $end
+$var wire 1 ;" click_io_reqIn $end
+$var wire 1 <" click_io_reset $end
+$var wire 1 E io_in_ack $end
+$var wire 8 =" io_in_data [7:0] $end
+$var wire 1 9 io_in_req $end
+$var wire 1 : io_out_ack $end
+$var wire 8 >" io_out_data [7:0] $end
+$var wire 1 C io_out_req $end
+$var wire 1 ; io_reset $end
+$var wire 1 ?" reg__io_clock $end
+$var wire 8 @" reg__io_in [7:0] $end
+$var wire 1 A" reg__io_reset $end
+$var wire 8 B" reg__io_out [7:0] $end
+$var wire 1 C" click_io_reqOut $end
+$var wire 1 D" click_io_click $end
+$var wire 1 E" click_io_ackIn $end
+$scope module click $end
+$var wire 1 F" Pi_io_clock $end
+$var wire 1 G" Pi_io_in $end
+$var wire 1 H" Pi_io_reset $end
+$var wire 1 I" Po_io_clock $end
+$var wire 1 J" Po_io_in $end
+$var wire 1 K" Po_io_reset $end
+$var wire 1 E" io_ackIn $end
+$var wire 1 :" io_ackOut $end
+$var wire 1 D" io_click $end
+$var wire 1 ;" io_reqIn $end
+$var wire 1 C" io_reqOut $end
+$var wire 1 <" io_reset $end
+$var wire 1 L" Po_io_out $end
+$var wire 1 M" Pi_io_out $end
+$scope module Pi $end
+$var wire 1 F" io_clock $end
+$var wire 1 G" io_in $end
+$var wire 1 H" io_reset $end
+$var wire 1 M" io_out $end
+$var reg 1 M" io_out_REG $end
+$upscope $end
+$scope module Po $end
+$var wire 1 I" io_clock $end
+$var wire 1 J" io_in $end
+$var wire 1 K" io_reset $end
+$var wire 1 L" io_out $end
+$var reg 1 L" io_out_REG $end
+$upscope $end
+$upscope $end
+$scope module reg_ $end
+$var wire 1 ?" io_clock $end
+$var wire 8 N" io_in [7:0] $end
+$var wire 1 A" io_reset $end
+$var wire 8 O" io_out [7:0] $end
+$var reg 8 P" io_out_REG [7:0] $end
+$upscope $end
+$upscope $end
+$scope module stages_4 $end
+$var wire 1 Q" click_io_ackOut $end
+$var wire 1 R" click_io_reqIn $end
+$var wire 1 S" click_io_reset $end
+$var wire 1 B io_in_ack $end
+$var wire 8 T" io_in_data [7:0] $end
+$var wire 1 = io_in_req $end
+$var wire 1 > io_out_ack $end
+$var wire 8 U" io_out_data [7:0] $end
+$var wire 1 @ io_out_req $end
+$var wire 1 ? io_reset $end
+$var wire 1 V" reg__io_clock $end
+$var wire 8 W" reg__io_in [7:0] $end
+$var wire 1 X" reg__io_reset $end
+$var wire 8 Y" reg__io_out [7:0] $end
+$var wire 1 Z" click_io_reqOut $end
+$var wire 1 [" click_io_click $end
+$var wire 1 \" click_io_ackIn $end
+$scope module click $end
+$var wire 1 ]" Pi_io_clock $end
+$var wire 1 ^" Pi_io_in $end
+$var wire 1 _" Pi_io_reset $end
+$var wire 1 `" Po_io_clock $end
+$var wire 1 a" Po_io_in $end
+$var wire 1 b" Po_io_reset $end
+$var wire 1 \" io_ackIn $end
+$var wire 1 Q" io_ackOut $end
+$var wire 1 [" io_click $end
+$var wire 1 R" io_reqIn $end
+$var wire 1 Z" io_reqOut $end
+$var wire 1 S" io_reset $end
+$var wire 1 c" Po_io_out $end
+$var wire 1 d" Pi_io_out $end
+$scope module Pi $end
+$var wire 1 ]" io_clock $end
+$var wire 1 ^" io_in $end
+$var wire 1 _" io_reset $end
+$var wire 1 d" io_out $end
+$var reg 1 d" io_out_REG $end
+$upscope $end
+$scope module Po $end
+$var wire 1 `" io_clock $end
+$var wire 1 a" io_in $end
+$var wire 1 b" io_reset $end
+$var wire 1 c" io_out $end
+$var reg 1 c" io_out_REG $end
+$upscope $end
+$upscope $end
+$scope module reg_ $end
+$var wire 1 V" io_clock $end
+$var wire 8 e" io_in [7:0] $end
+$var wire 1 X" io_reset $end
+$var wire 8 f" io_out [7:0] $end
+$var reg 8 g" io_out_REG [7:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b0 g"
+b0 f"
+b0 e"
+0d"
+0c"
+1b"
+1a"
+x`"
+1_"
+1^"
+x]"
+0\"
+x["
+0Z"
+b0 Y"
+1X"
+b0 W"
+xV"
+b0 U"
+b0 T"
+1S"
+xR"
+0Q"
+b0 P"
+b0 O"
+b0 N"
+0M"
+0L"
+1K"
+1J"
+xI"
+1H"
+1G"
+xF"
+0E"
+xD"
+0C"
+b0 B"
+1A"
+b0 @"
+x?"
+b0 >"
+b0 ="
+1<"
+x;"
+0:"
+b0 9"
+b0 8"
+b0 7"
+06"
+05"
+14"
+13"
+x2"
+11"
+10"
+x/"
+0."
+x-"
+0,"
+b0 +"
+1*"
+b0 )"
+x("
+b0 '"
+b0 &"
+1%"
+x$"
+0#"
+b0 ""
+b0 !"
+b0 ~
+0}
+0|
+1{
+1z
+xy
+1x
+1w
+xv
+0u
+xt
+0s
+b0 r
+1q
+b0 p
+xo
+b0 n
+b0 m
+1l
+xk
+0j
+b0 i
+b0 h
+b1000 g
+0f
+0e
+1d
+1c
+0b
+1a
+1`
+0_
+0^
+0]
+0\
+b0 [
+1Z
+b1000 Y
+0X
+b0 W
+b1000 V
+1U
+0T
+0S
+xR
+xQ
+xP
+xO
+0N
+b0 M
+0L
+0K
+b0 J
+0I
+0H
+b0 G
+0F
+0E
+b0 D
+0C
+0B
+b0 A
+0@
+1?
+0>
+x=
+b0 <
+1;
+0:
+x9
+b0 8
+17
+06
+x5
+b0 4
+13
+02
+x1
+b0 0
+1/
+0.
+0-
+b1000 ,
+1+
+0*
+b0 )
+0(
+0'
+b1000 &
+0%
+0$
+0#
+0"
+0!
+$end
+#1000
+0a
+0d
+0U
+0Z
+0/
+0x
+0{
+0l
+0q
+03
+01"
+04"
+0%"
+0*"
+07
+0H"
+0K"
+0<"
+0A"
+0;
+0_"
+0b"
+0S"
+0X"
+0?
+0+
+0o
+0t
+0v
+0y
+0k
+01
+0R
+#2000
+0c
+0`
+b1000 p
+b1000 ~
+b1000 0
+b1000 m
+b1000 M
+b1000 W
+b1000 [
+b1000 h
+b1000 i
+1%
+1N
+1^
+1f
+1!
+1L
+1\
+1e
+0X
+0]
+0_
+0b
+1T
+1-
+1'
+0("
+0-"
+0/"
+02"
+0$"
+05
+0Q
+#3000
+0z
+0w
+b1000 )"
+b1000 7"
+b1000 4
+b1000 &"
+b1000 J
+b1000 n
+b1000 r
+b1000 !"
+b1000 ""
+1S
+1.
+1K
+1u
+1}
+1"
+1I
+1s
+1|
+0o
+0t
+0v
+0y
+0?"
+0D"
+0F"
+0I"
+1k
+11
+1R
+0;"
+09
+0P
+#4000
+0V"
+0["
+0]"
+0`"
+0R"
+0=
+0O
+#5000
+03"
+00"
+b1000 @"
+b1000 N"
+b1000 8
+b1000 ="
+b1000 G
+b1000 '"
+b1000 +"
+b1000 8"
+b1000 9"
+1j
+12
+1H
+1."
+16"
+1#
+1F
+1,"
+15"
+0("
+0-"
+0/"
+02"
+1$"
+15
+1Q
+#8000
+0J"
+0G"
+b1000 W"
+b1000 e"
+b1000 <
+b1000 T"
+b1000 D
+b1000 >"
+b1000 B"
+b1000 O"
+b1000 P"
+1#"
+16
+1E
+1E"
+1M"
+1$
+1C
+1C"
+1L"
+0?"
+0D"
+0F"
+0I"
+1;"
+19
+1P
+#12000
+0a"
+0^"
+b1000 )
+b1000 A
+b1000 U"
+b1000 Y"
+b1000 f"
+b1000 g"
+1:"
+1:
+1B
+1\"
+1d"
+1*
+1@
+1Z"
+1c"
+0V"
+0["
+0]"
+0`"
+1R"
+1=
+1O
+#14000
+1c
+1`
+0%
+0N
+0^
+0f
+0!
+0L
+0\
+0e
+0X
+0]
+0_
+0b
+1Q"
+1>
+1(
+0T
+0-
+0'
+#15000
+1z
+1w
+0S
+0.
+0K
+0u
+0}
+0"
+0I
+0s
+0|
+0o
+0t
+0v
+0y
+0k
+01
+0R
+#17000
+13"
+10"
+0j
+02
+0H
+0."
+06"
+0#
+0F
+0,"
+05"
+0("
+0-"
+0/"
+02"
+0$"
+05
+0Q
+#20000
+1J"
+1G"
+0#"
+06
+0E
+0E"
+0M"
+0$
+0C
+0C"
+0L"
+0?"
+0D"
+0F"
+0I"
+0;"
+09
+0P
+#24000
+1a"
+1^"
+0:"
+0:
+0B
+0\"
+0d"
+0*
+0@
+0Z"
+0c"
+0V"
+0["
+0]"
+0`"
+0R"
+0=
+0O
+#24001
+b0 p
+b0 ~
+b0 0
+b0 m
+b0 M
+b0 W
+b0 [
+b0 h
+b0 i
+b0 )"
+b0 7"
+b0 4
+b0 &"
+b0 J
+b0 n
+b0 r
+b0 !"
+b0 ""
+b0 @"
+b0 N"
+b0 8
+b0 ="
+b0 G
+b0 '"
+b0 +"
+b0 8"
+b0 9"
+b0 W"
+b0 e"
+b0 <
+b0 T"
+b0 D
+b0 >"
+b0 B"
+b0 O"
+b0 P"
+b0 )
+b0 A
+b0 U"
+b0 Y"
+b0 f"
+b0 g"
+1a
+1d
+1U
+1Z
+1/
+1x
+1{
+1l
+1q
+13
+11"
+14"
+1%"
+1*"
+17
+1H"
+1K"
+1<"
+1A"
+1;
+1_"
+1b"
+1S"
+1X"
+1?
+1+
+0Q"
+0>
+0(
+#25001
+0a
+0d
+0U
+0Z
+0/
+0x
+0{
+0l
+0q
+03
+01"
+04"
+0%"
+0*"
+07
+0H"
+0K"
+0<"
+0A"
+0;
+0_"
+0b"
+0S"
+0X"
+0?
+0+
+#26001
+0c
+0`
+b1000 p
+b1000 ~
+b1000 0
+b1000 m
+b1000 M
+b1000 W
+b1000 [
+b1000 h
+b1000 i
+1%
+1N
+1^
+1f
+1!
+1L
+1\
+1e
+0X
+0]
+0_
+0b
+1T
+1-
+1'
+#27001
+0z
+0w
+b1000 )"
+b1000 7"
+b1000 4
+b1000 &"
+b1000 J
+b1000 n
+b1000 r
+b1000 !"
+b1000 ""
+1S
+1.
+1K
+1u
+1}
+1"
+1I
+1s
+1|
+0o
+0t
+0v
+0y
+1k
+11
+1R
+#29001
+03"
+00"
+b1000 @"
+b1000 N"
+b1000 8
+b1000 ="
+b1000 G
+b1000 '"
+b1000 +"
+b1000 8"
+b1000 9"
+1j
+12
+1H
+1."
+16"
+1#
+1F
+1,"
+15"
+0("
+0-"
+0/"
+02"
+1$"
+15
+1Q
+#32001
+0J"
+0G"
+b1000 W"
+b1000 e"
+b1000 <
+b1000 T"
+b1000 D
+b1000 >"
+b1000 B"
+b1000 O"
+b1000 P"
+1#"
+16
+1E
+1E"
+1M"
+1$
+1C
+1C"
+1L"
+0?"
+0D"
+0F"
+0I"
+1;"
+19
+1P
+#36001
+1c
+1`
+0%
+0N
+0^
+0f
+0!
+0L
+0\
+0e
+0X
+0]
+0_
+0b
+0T
+0-
+0'
+0a"
+0^"
+b1000 )
+b1000 A
+b1000 U"
+b1000 Y"
+b1000 f"
+b1000 g"
+1:"
+1:
+1B
+1\"
+1d"
+1*
+1@
+1Z"
+1c"
+0V"
+0["
+0]"
+0`"
+1R"
+1=
+1O
+#37001
+1z
+1w
+0S
+0.
+0K
+0u
+0}
+0"
+0I
+0s
+0|
+0o
+0t
+0v
+0y
+0k
+01
+0R
+#39001
+13"
+10"
+0j
+02
+0H
+0."
+06"
+0#
+0F
+0,"
+05"
+0("
+0-"
+0/"
+02"
+0$"
+05
+0Q
+#42001
+1J"
+1G"
+0#"
+06
+0E
+0E"
+0M"
+0$
+0C
+0C"
+0L"
+0?"
+0D"
+0F"
+0I"
+0;"
+09
+0P
+#46001
+0R"
+0=
+0O
+#51002

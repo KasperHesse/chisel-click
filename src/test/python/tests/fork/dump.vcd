@@ -1,0 +1,74 @@
+$date
+	Mon Apr 25 15:15:32 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module Fork $end
+$var wire 1 ! clock $end
+$var wire 1 " io_in_ack $end
+$var wire 8 # io_in_data [7:0] $end
+$var wire 1 $ io_in_req $end
+$var wire 1 % io_out1_ack $end
+$var wire 8 & io_out1_data [7:0] $end
+$var wire 1 ' io_out1_req $end
+$var wire 1 ( io_out2_ack $end
+$var wire 8 ) io_out2_data [7:0] $end
+$var wire 1 * io_out2_req $end
+$var wire 1 + phase_io_clock $end
+$var wire 1 , phase_io_in $end
+$var wire 1 - phase_io_reset $end
+$var wire 1 . reset $end
+$var wire 1 / phase_io_out $end
+$scope module phase $end
+$var wire 1 + io_clock $end
+$var wire 1 , io_in $end
+$var wire 1 - io_reset $end
+$var wire 1 / io_out $end
+$var reg 1 / io_out_REG $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+0/
+1.
+1-
+1,
+0+
+0*
+b0 )
+0(
+0'
+b0 &
+0%
+0$
+b0 #
+0"
+z!
+$end
+#1000
+0-
+0.
+#2000
+b1111 &
+b1111 )
+b1111 #
+1'
+1*
+1$
+#3000
+1%
+#4000
+0%
+1(
+#5000
+0,
+1"
+1/
+0+
+1%
+#6001
