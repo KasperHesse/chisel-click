@@ -16,6 +16,10 @@ clean:
 test:
 	$(MAKE) -k -C src/test/python
 
+.PHONY: dir
+dir:
+	$(MAKE) -k -C src/test/python/tests/fib dir
+
 .PHONY: single
 single:
-	$(MAKE) -k -C src/test/python/tests/$(TESTNAME)
+	$(MAKE) -k -C src/test/python/tests/$(TESTNAME) WORKDIR=$(CURDIR)

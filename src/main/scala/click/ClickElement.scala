@@ -24,7 +24,7 @@ class ClickElement(ri: Boolean = false) extends RawModule {
   val Po = Module(new PhaseRegister(ri))
 
   Pi.io.in := !Pi.io.out
-  Po.io.in := !Pi.io.out
+  Po.io.in := !Po.io.out
 
   Pi.io.clock := click.asClock
   Po.io.clock := click.asClock

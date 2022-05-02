@@ -8,6 +8,18 @@ package object click {
   }
 
   /**
+   * A bundle holding two data items, making it easier to implement fork/join and logic blocks taking multiple inputs
+   * @param gen1
+   * @param gen2
+   * @tparam T1
+   * @tparam T2
+   */
+  class Bundle2[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2) extends Bundle {
+    val a = Output(gen1) //Using Output() to avoid clone type issues, fields are actually inputs
+    val b = Output(gen2)
+  }
+
+  /**
    * An I/O bundle for a handshake port on a module
    * @param typ The datatype on the input and output of this block
    * @tparam T

@@ -10,7 +10,7 @@ class Fifo(N: Int) extends RawModule {
     Module(new HandshakeRegister(0.U(8.W)))
   }
   val delays = for(i <- 0 until N-1) yield {
-    Module(new DelayElement(i+1))
+    Module(new DelayElementSim(i+1))
   }
   for(i <- 0 until stages.length - 1) {
     stages(i).io.out <> stages(i+1).io.in
