@@ -14,7 +14,11 @@ clean:
 
 .PHONY: test
 test:
-	$(MAKE) -k -C src/test/python
+	$(MAKE) -k -C src/test/python WORKDIR=$(CURDIR)
+
+.PHONY: gen
+gen:
+	sbt "runMain Generate"
 
 .PHONY: dir
 dir:

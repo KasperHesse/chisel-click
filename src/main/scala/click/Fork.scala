@@ -42,8 +42,8 @@ class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: 
 object Fork {
 
   /**
-   * Generates a Fork module which duplicates its output on both inputs
-   * @param typ
+   * Generates a Fork module which duplicates its input on both outputs
+   * @param typ The type of data being forked
    * @tparam T
    * @return
    */

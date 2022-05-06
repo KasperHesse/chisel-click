@@ -3,11 +3,11 @@ package examples
 import chisel3._
 import click._
 
-class Fifo(N: Int) extends RawModule {
-  val io = IO(new HandshakeIO(UInt(8.W)))
+class Fifo(N: Int, dataWidth: Int)(implicit conf: ClickConfig) extends RawModule {
+  val io = IO(new HandshakeIO(UInt(dataWidth.W)))
 
   val stages = for(i <- 0 until N) yield {
-    Module(new HandshakeRegister(0.U(8.W)))
+    Module(new HandshakeRegister(0.U(dataWidth.W)))
   }
   val delays = for(i <- 0 until N-1) yield {
     Module(new DelayElementSim(i+1))

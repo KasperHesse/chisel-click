@@ -2,7 +2,6 @@ package click
 
 import chisel3._
 import chisel3.util._
-import click.ClickConfig.ADD_DELAY
 
 /**
  * A generic logic block that can be used to create a logic function.
@@ -16,7 +15,7 @@ import click.ClickConfig.ADD_DELAY
  * @tparam T1 The type of input arguments. They are assumed to be the same
  * @tparam T2 The type of output argument
  */
-class LogicBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay: Int) extends Module {
+class LogicBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay: Int)(implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in = new ReqAck(gen1)
     val out = Flipped(new ReqAck(gen2))
@@ -36,11 +35,13 @@ class LogicBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay:
  * @param gen1 Type of the first data input
  * @param gen2 Type of the second data input
  * @param gen3 Type of the data output
+ * @param delay The delay of the adder. Defaults to -1, meaning that it should follow
+ *              the value of [[ClickConfig.ADD_DELAY]] set in the implicit configuration object
  * @tparam T1
  * @tparam T2
  * @tparam T3
  */
-class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3) extends Module {
+class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3, delay: Int = -1)(implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in1 = new ReqAck(gen1)
     val in2 = new ReqAck(gen2)
@@ -55,7 +56,7 @@ class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3) ex
     r
   }))
 
-  val logic = Module(new LogicBlock(new Bundle2(gen1, gen2), gen3, (in: Bundle2[T1, T2]) => in.a.asUInt + in.b.asUInt, ClickConfig.ADD_DELAY))
+  val logic = Module(new LogicBlock(new Bundle2(gen1, gen2), gen3, (in: Bundle2[T1, T2]) => in.a.asUInt + in.b.asUInt, if(delay == -1) conf.ADD_DELAY else delay))
 
   joinDelays(0).io.reqIn := io.in1.req
   joinDelays(1).io.reqIn := io.in2.req
@@ -74,7 +75,7 @@ object Adder {
    * Creates an N-bit adder taking UInts as its inputs, returning a UInt of the same width
    * @param width The width of the adder
    */
-  def apply(width: Int): Adder[UInt, UInt, UInt] = {
+  def apply(width: Int)(implicit conf: ClickConfig): Adder[UInt, UInt, UInt] = {
     new Adder(UInt(width.W), UInt(width.W), UInt(width.W))
   }
 }

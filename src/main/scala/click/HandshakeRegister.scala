@@ -9,7 +9,7 @@ import chisel3._
  * @tparam T The type of data stored in the register
  *
  */
-class HandshakeRegister[T <: Data](init: T, ri: Boolean = false) extends RawModule {
+class HandshakeRegister[T <: Data](init: T, ri: Boolean = false)(implicit conf: ClickConfig) extends RawModule {
   val io = IO(new HandshakeIO(chiselTypeOf(init)))
 
   val click = Module(new ClickElement(ri))

@@ -1,9 +1,11 @@
 import chisel3._
+import chisel3.util._
 import chisel3.stage.ChiselStage
 import click._
 import examples.{Fib, Fifo}
 
-import java.io.RandomAccessFile
+import scala.io._
+import java.io.{BufferedOutputStream, BufferedWriter, File, FileWriter, RandomAccessFile}
 
 object Top extends App {
 
@@ -28,8 +30,7 @@ object Top extends App {
     f.close()
   }
 
-  (new ChiselStage).emitVerilog(new Fib(8), Array("-td", "gen", "--emission-options", "disableRegisterRandomization"))
-  addVcd("Fib")
-
-
+  val cc = ClickConfig()
+  (new ChiselStage).emitVerilog(JoinReg(8, 4, ri = true)(cc), Array("-td", "gen", "--emission-options", "disableRegisterRandomization"))
+  addVcd("JoinReg")
 }

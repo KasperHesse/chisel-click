@@ -1,6 +1,26 @@
 import chisel3._
 
 package object click {
+
+  /**
+   * Generates a delay element (if required), connecting the input signal and returning a handle
+   * to the output signal
+   * @param reqIn The input signal that should be delayed
+   * @param delay The default delay value from the configuration used.
+   * @param conf The configuration object in use
+   * @return
+   */
+  def simDelay(reqIn: Bool, delay: Int)(implicit conf: ClickConfig): Bool = {
+    if(delay > 0) {
+      //Custom delay is set
+      val d = Module(DelayElement(delay))
+      d.io.reqIn := reqIn
+      d.io.reqOut
+    } else {
+      //No delay
+      reqIn
+    }
+  }
   class ReqAck[T <: Data](gen: T) extends Bundle {
     val req = Input(Bool())
     val ack = Output(Bool())

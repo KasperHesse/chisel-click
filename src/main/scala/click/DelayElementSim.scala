@@ -21,7 +21,7 @@ class DelayElementSim(delay: Int = 1) extends DelayElement(delay) {
       | output reg reqOut
       |);
       |always@(reqIn) begin
-      | #$delay reqOut <= reqIn;
+      | reqOut <= #$delay reqIn;
       |end
       |initial begin
       | reqOut <= 1'b0;
@@ -34,7 +34,7 @@ class DelayElementSynth(delay: Int) extends DelayElement(delay) {
 }
 
 object DelayElement {
-  def apply(delay: Int): DelayElement = {
-    if(ClickConfig.SIMULATION) new DelayElementSim(delay) else new DelayElementSim(delay)
+  def apply(delay: Int)(implicit conf: ClickConfig): DelayElement = {
+    if(conf.SIMULATION) new DelayElementSim(delay) else new DelayElementSim(delay)
   }
 }
