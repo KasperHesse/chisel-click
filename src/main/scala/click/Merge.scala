@@ -9,7 +9,7 @@ import chisel3._
  * @param typ The type of data to use on this channel
  * @tparam T
  */
-class Merge[T <: Data](typ: T) extends Module {
+class Merge[T <: Data](typ: T)(implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ)
     val in2 = new ReqAck(typ)
@@ -41,6 +41,6 @@ class Merge[T <: Data](typ: T) extends Module {
   io.in1.ack := Pa.io.out
   io.in2.ack := Pb.io.out
   io.out.data := Mux(selA, io.in1.data, io.in2.data)
-  io.out.req := Pc.io.out
+  io.out.req := simDelay(Pc.io.out, conf.MERGE_DELAY)
 
 }

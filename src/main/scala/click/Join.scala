@@ -15,7 +15,7 @@ import chisel3._
  * @tparam T2
  * @tparam T3
  */
-class Join[T1 <: Data, T2 <: Data, T3 <: Data](typIn1: T1, typIn2: T2, typOut: T3, join: (T1, T2) => T3) extends Module {
+class Join[T1 <: Data, T2 <: Data, T3 <: Data](typIn1: T1, typIn2: T2, typOut: T3, join: (T1, T2) => T3)(implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typIn1)
     val in2 = new ReqAck(typIn2)
@@ -29,7 +29,7 @@ class Join[T1 <: Data, T2 <: Data, T3 <: Data](typIn1: T1, typIn2: T2, typOut: T
   phase.io.reset := this.reset.asAsyncReset
   phase.io.in := !phase.io.out
 
-  io.out.req := phase.io.out
+  io.out.req := simDelay(phase.io.out, conf.JOIN_DELAY)
   io.in1.ack := io.out.ack
   io.in2.ack := io.out.ack
 
@@ -45,7 +45,7 @@ object Join {
    * @param width The bitwidth of the two inputs
    * @return
    */
-  def apply(width: Int): Join[UInt, UInt, UInt] = {
+  def apply(width: Int)(implicit conf: ClickConfig): Join[UInt, UInt, UInt] = {
 
     def join(in1: UInt, in2: UInt): UInt = {
       util.Cat(in2, in1)

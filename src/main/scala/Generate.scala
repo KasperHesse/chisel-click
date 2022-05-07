@@ -58,8 +58,9 @@ object Generate extends App {
   gen(new Demultiplexer(UInt(8.W))(cc))
   gen(new Fib(8)(cc))
   gen(new Fifo(5, 8)(cc))
-  gen(Fork(UInt(8.W)))
-  gen(Join(8))
+  gen(Fork(UInt(8.W))(cc))
+  gen(new Fib(8)(cc))
+  gen(Join(8)(cc))
   gen(JoinReg(8, 4, ri = true)(cc))
   //Simple join-reg-fork block
   gen(JoinRegFork(widthIn=8, valueOut=0, ri=false)(cc))
@@ -71,9 +72,9 @@ object Generate extends App {
   })(cc))
   renameModule("JoinRegFork", "JRF_complex")
 
-  gen(new Merge(UInt(8.W)))
+  gen(new Merge(UInt(8.W))(cc))
   gen(new Multiplexer(UInt(8.W))(cc))
-  gen(RegFork(4.U(8.W))(cc))
+  gen(RegFork(4.U(8.W), false)(cc))
 
 
   //Add VCD footers for simulation

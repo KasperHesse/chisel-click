@@ -14,7 +14,7 @@ clean:
 
 .PHONY: test
 test:
-	$(MAKE) -k -C src/test/python WORKDIR=$(CURDIR)
+	$(MAKE) -C src/test/python WORKDIR=$(CURDIR)
 
 .PHONY: gen
 gen:

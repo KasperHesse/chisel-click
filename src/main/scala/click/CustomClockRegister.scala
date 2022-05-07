@@ -15,7 +15,7 @@ class CustomClockRegister[T <: Data](init: T) extends RawModule {
     val out = Output(chiselTypeOf(init))
   })
 
-  io.out := withClockAndReset(io.clock, io.reset) {RegNext(io.in, init)}
+  io.out := withClockAndReset(io.clock, io.reset) {RegNext(io.in, WireInit(init))}
 }
 
 /**

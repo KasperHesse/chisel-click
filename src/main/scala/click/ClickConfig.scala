@@ -5,6 +5,9 @@ case class ClickConfig(
                       DEMUX_DELAY: Int = 3,
                       REG_DELAY: Int = 5,
                       ADD_DELAY: Int = 15,
+                      MERGE_DELAY: Int = 2,
+                      JOIN_DELAY: Int = 2,
+                      FORK_DELAY: Int = 2,
                       SIMULATION: Boolean = true
                       )
 

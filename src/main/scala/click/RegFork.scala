@@ -71,7 +71,7 @@ object RegFork {
    * @tparam T
    * @return
    */
-  def apply[T <: Data](init: T, ri: Boolean = false)(implicit conf: ClickConfig): RegFork[T, T, T] = {
+  def apply[T <: Data](init: T, ri: Boolean)(implicit conf: ClickConfig): RegFork[T, T, T] = {
     require(init.isWidthKnown, "The width of the init signal must be known")
     new RegFork(chiselTypeOf(init), init, init, ri, ri, (a: T) => (a, a))
   }

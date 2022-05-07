@@ -16,7 +16,7 @@ import chisel3._
  * @tparam T2
  * @tparam T3
  */
-class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: T3, fork: T1 => (T2, T3)) extends Module {
+class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: T3, fork: T1 => (T2, T3))(implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in = new ReqAck(typIn)
     val out1 = Flipped(new ReqAck(typOut1))
@@ -31,8 +31,9 @@ class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: 
   phase.io.in := !phase.io.out
 
   io.in.ack := phase.io.out
-  io.out1.req := io.in.req
-  io.out2.req := io.in.req
+  val reqDelayed = simDelay(io.in.req, conf.FORK_DELAY)
+  io.out1.req := reqDelayed
+  io.out2.req := reqDelayed
 
   val d = fork(io.in.data)
   io.out1.data := d._1
@@ -47,7 +48,7 @@ object Fork {
    * @tparam T
    * @return
    */
-  def apply[T <: Data](typ: T): Fork[T, T, T] = {
+  def apply[T <: Data](typ: T)(implicit conf: ClickConfig): Fork[T, T, T] = {
     new Fork(typ, typ, typ, (a: T) => (a, a))
   }
 }
