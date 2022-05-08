@@ -4,13 +4,13 @@ import chisel3._
 import chisel3.util._
 
 /**
- * The JoinReg block utilizes peephole optimizations to implement a join block and register in the same module
- * The JoinReg-module supports any type of forking behavior, but if a simpler behavior is wanted (such as an two
- * input UInts being concatenated onto the output channel), the companion object contains methods to instantiate this
+ * The JoinReg block utilizes peephole optimizations to implement a join block and register in the same module.
+ * The JoinReg-module supports any type of forking behavior, but if a simpler behavior is wanted (such as two
+ * input UInts being concatenated onto the output channel), the companion object contains methods to instantiate this.
  * @param typ1 The type of the first input
  * @param typ2 The type of the second input
  * @param init3 The initial/reset value of the output register
- * @param ri Whether out.req starts high (true) or low (false)
+ * @param ri Initial value of the control circuit's out.req signal
  * @param join The function used to join the two input stream's data
  * @tparam T1
  * @tparam T2
@@ -25,7 +25,8 @@ class JoinReg[T1 <: Data, T2 <: Data, T3 <: Data]
     val out = Flipped(new ReqAck(chiselTypeOf(init3)))
   })
 
-  val click = simDelay((io.in1.req ^ io.in1.ack) && (io.in2.req ^ io.in2.ack) && !(io.out.req ^ io.out.ack), conf.REG_DELAY).asClock
+  val click = simDelay((io.in1.req ^ io.in1.ack) && (io.in2.req ^ io.in2.ack) && !(io.out.req ^ io.out.ack),
+    conf.REG_DELAY + conf.FORK_DELAY/2).asClock
   val Pa = Module(new PhaseRegister(false))
   val Pb = Module(new PhaseRegister(false))
   val Pc = Module(new PhaseRegister(ri))

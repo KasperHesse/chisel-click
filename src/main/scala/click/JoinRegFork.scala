@@ -36,7 +36,8 @@ class JoinRegFork[T1 <: Data, T2 <: Data, T3 <: Data, T4 <: Data]
   val reg2 = Module(new CustomClockRegister(init4))
   
   //Phase and handshake register signals
-  val click = simDelay((io.in1.req ^ io.in1.ack) && (io.in2.req ^ io.in2.ack) && !(io.out1.req ^ io.out1.ack) && !(io.out2.req ^ io.out2.ack), conf.REG_DELAY).asClock
+  val click = simDelay((io.in1.req ^ io.in1.ack) && (io.in2.req ^ io.in2.ack) && !(io.out1.req ^ io.out1.ack) && !(io.out2.req ^ io.out2.ack),
+    conf.REG_DELAY + (conf.FORK_DELAY+conf.JOIN_DELAY)/2).asClock
   
   Pa.io.clock := click
   Pa.io.reset := this.reset.asAsyncReset

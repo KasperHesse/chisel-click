@@ -14,19 +14,17 @@ class HandshakeRegister[T <: Data](init: T, ri: Boolean = false)(implicit conf: 
 
   val click = Module(new ClickElement(ri))
   val reg = Module(new CustomClockRegister(init))
-  val delay = Module(DelayElement(1))
 
-  delay.io.reqIn := io.in.req
 
   reg.io.clock := click.io.click
   reg.io.reset := io.reset
   reg.io.in := io.in.data
 
-  click.io.reqIn := delay.io.reqOut
+  click.io.reqIn := io.in.req
   click.io.ackOut := io.out.ack
   click.io.reset := io.reset
 
   io.in.ack := click.io.ackIn
-  io.out.req := click.io.reqOut
+  io.out.req := simDelay(click.io.reqOut, conf.REG_DELAY)
   io.out.data := reg.io.out
 }

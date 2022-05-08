@@ -13,9 +13,9 @@ async def add_numbers(dut):
     dut.io_in1_data.value = 42
     dut.io_in2_data.value = 84
     dut.io_out_ack.value = 0
-    await Timer(1)
+    await Timer(5, "ns")
     dut.reset.value = 0
-    await Timer(1)
+    await Timer(1, "ns")
 
     assert dut.io_out_req.value == 0
     dut.io_in1_req.value = 1

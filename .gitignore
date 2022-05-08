@@ -346,3 +346,8 @@ sim_build
 results.xml
 *.gtkw
 __pycache__
+*.json
+*.fir
+*.v
+*.vhd
+*.f

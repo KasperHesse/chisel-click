@@ -33,7 +33,8 @@ class RegFork[T1 <: Data, T2 <: Data, T3 <: Data]
   val reg2 = Module(new CustomClockRegister(init3))
 
   //Clocking logic
-  val click = simDelay((io.in.req ^ io.in.ack) && !(io.out1.req ^ io.out1.ack) && !(io.out2.req ^ io.out2.ack), conf.REG_DELAY).asClock
+  val click = simDelay((io.in.req ^ io.in.ack) && !(io.out1.req ^ io.out1.ack) && !(io.out2.req ^ io.out2.ack),
+    conf.REG_DELAY + conf.FORK_DELAY/2).asClock
   Pa.io.clock := click
   Pa.io.reset := this.reset.asAsyncReset
   Pa.io.in := !Pa.io.out

@@ -3,17 +3,16 @@ import chisel3._
 package object click {
 
   /**
-   * Generates a delay element (if required), connecting the input signal and returning a handle
-   * to the output signal
+   * Generates a simulation delay, useful for debugging wave traces
+   * When synthesizing and [[ClickConfig.SIMULATION]] is false, simply connects the input to the output
    * @param reqIn The input signal that should be delayed
    * @param delay The default delay value from the configuration used.
    * @param conf The configuration object in use
    * @return
    */
   def simDelay(reqIn: Bool, delay: Int)(implicit conf: ClickConfig): Bool = {
-    if(delay > 0) {
-      //Custom delay is set
-      val d = Module(DelayElement(delay))
+    if(delay > 0 && conf.SIMULATION) {
+      val d = Module(new DelayElementSim(delay))
       d.io.reqIn := reqIn
       d.io.reqOut
     } else {
@@ -21,6 +20,38 @@ package object click {
       reqIn
     }
   }
+
+  /**
+   * Generates a synthesizable delay element, for delaying request signals
+   * until their attached combinational logic has finished evaluating.
+   * If [[ClickConfig.SIMULATION]] is true, instantiates a simulation delay of the desired size instead
+   * @param reqIn The request signal that should be delayed
+   * @param delay The delay value. Does not translate directly to any unit,
+   *              but larger values = greater delay
+   * @param conf The configuration object in use
+   * @return
+   */
+  def synthDelay(reqIn: Bool, delay: Int)(implicit conf: ClickConfig): Bool = {
+    if(delay > 0) {
+      if(conf.SIMULATION) {
+        val d = Module(new DelayElementSim(delay))
+        d.io.reqIn := reqIn
+        d.io.reqOut
+      } else {
+        val d = Module(new DelayElementSynth(delay))
+        d.io.reqIn := reqIn
+        d.io.reqOut
+      }
+    } else {
+      reqIn
+    }
+  }
+
+  /**
+   * A bundle representing a bundled-data request/acknowledge handshake
+   * @param gen
+   * @tparam T
+   */
   class ReqAck[T <: Data](gen: T) extends Bundle {
     val req = Input(Bool())
     val ack = Output(Bool())
@@ -51,24 +82,5 @@ package object click {
     val reset = Input(AsyncReset())
     /** Handshake on output */
     val out = Flipped(new ReqAck(typ))
-  }
-
-  /**
-   * An I/O bundle for a handshake port on a module where the input and output datatypes are not the same
-   * @param typ1 The input datatype
-   * @param typ2 The output datatype
-   * @tparam T1
-   * @tparam T2
-   */
-  class OddHandshakeIO[T1<: Data, T2 <: Data](typ1: T1, typ2: T2) extends Bundle {
-    /** Input handshake */
-    val in = new ReqAck(typ1)
-    /** Output handshake */
-    val out = Flipped(new ReqAck(typ2))
-  }
-
-  /** Helper object to create new data items wrapped in a handshake */
-  object HandshakeIO {
-    def apply[T <: Data](gen: T): HandshakeIO[T] = new HandshakeIO(gen)
   }
 }

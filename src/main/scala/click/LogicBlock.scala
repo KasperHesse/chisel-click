@@ -21,9 +21,7 @@ class LogicBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay:
     val out = Flipped(new ReqAck(gen2))
   })
 
-  val de = Module(DelayElement(delay))
-  de.io.reqIn := io.in.req
-  io.out.req := de.io.reqOut
+  io.out.req := synthDelay(io.in.req, delay)
   io.in.ack := io.out.ack
 
   io.out.data := f(io.in.data)
@@ -48,7 +46,6 @@ class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3, de
     val out = Flipped(new ReqAck(gen3))
   })
 
-  val joinDelays = Seq.fill(2)(Module(DelayElement(2)))
   val join = Module(new Join(gen1, gen2, new Bundle2(gen1, gen2), (a: T1, b: T2) => {
     val r = Wire(new Bundle2(gen1, gen2))
     r.a := a
@@ -58,12 +55,10 @@ class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3, de
 
   val logic = Module(new LogicBlock(new Bundle2(gen1, gen2), gen3, (in: Bundle2[T1, T2]) => in.a.asUInt + in.b.asUInt, if(delay == -1) conf.ADD_DELAY else delay))
 
-  joinDelays(0).io.reqIn := io.in1.req
-  joinDelays(1).io.reqIn := io.in2.req
   join.io.in1 <> io.in1
   join.io.in2 <> io.in2
-  join.io.in1.req := joinDelays(0).io.reqOut
-  join.io.in2.req := joinDelays(1).io.reqOut
+  join.io.in1.req := simDelay(io.in1.req, conf.JOIN_DELAY)
+  join.io.in2.req := simDelay(io.in2.req, conf.JOIN_DELAY)
 
   logic.io.in <> join.io.out
 

@@ -30,7 +30,7 @@ object Top extends App {
     f.close()
   }
 
-  val cc = ClickConfig()
-  (new ChiselStage).emitVerilog(new GCD(8)(cc), Array("-td", "gen", "--emission-options", "disableRegisterRandomization"))
-  addVcd("GCD")
+  val conf = ClickConfig()
+  (new ChiselStage).emitVerilog(Adder(8)(conf), Array("-td", "gen", "--emission-options", "disableRegisterRandomization"))
+  addVcd("Adder")
 }

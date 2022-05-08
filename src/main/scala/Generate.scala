@@ -78,8 +78,16 @@ object Generate extends App {
 
 
   //Add VCD footers for simulation
-//  addVcd("JRF_simple")
-//  addVcd("JRF_complex")
-//  addVcd("Fifo")
-//  addVcd("Fib")
+  addVcd("Adder")
+  addVcd("Demultiplexer")
+  addVcd("Fib")
+  addVcd("Fifo")
+  addVcd("GCD")
+  addVcd("Join")
+  addVcd("JoinReg")
+  addVcd("JRF_complex")
+  addVcd("JRF_simple")
+  addVcd("Merge")
+  addVcd("Multiplexer")
+  addVcd("RegFork")
 }

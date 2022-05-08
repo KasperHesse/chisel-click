@@ -3,6 +3,36 @@ package examples
 import chisel3._
 import click._
 import chisel3.experimental.BundleLiterals._
+import chisel3.stage.ChiselStage
+import chisel3.util.{RegEnable, log2Ceil}
+
+/**
+ * Input synchronizer for using the debounced PMOD push buttons on the
+ * [[https://digilent.com/shop/pmod-btn-4-user-pushbuttons/ PB200-077 module]]
+ */
+class InputSync extends Module {
+  val io = IO(new Bundle {
+    val in = Input(new Bundle {
+      val req = Bool()
+      val ack = Bool()
+    })
+    val out = Output(new Bundle {
+      val req = Bool()
+      val ack = Bool()
+    })
+  })
+
+  val in = RegNext(RegNext(io.in))
+  val req = RegInit(false.B)
+  val ack = RegInit(false.B)
+
+  //Rising edge detectors on the pushbuttons, change state of req/ack signals
+  req := Mux(in.req && !RegNext(in.req), !req, req)
+  ack := Mux(in.ack && !RegNext(in.ack), !ack, ack)
+
+  io.out.req := req
+  io.out.ack := ack
+}
 
 class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
   def dtype() = new Bundle2(UInt(dataWidth.W), UInt(dataWidth.W))
@@ -23,9 +53,9 @@ class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
   val F0 = Module(Fork(Bool()))
 
   //CL1 implements a != b, used to track if execution has finished
-  val CL0 = Module(new LogicBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a =/= x.b, delay=3))
+  val CL0 = Module(new LogicBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a =/= x.b, delay=5))
   //CL1 implements a>b, used to select whether to update the value of A or B through the loop
-  val CL1 = Module(new LogicBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a > x.b, delay=3))
+  val CL1 = Module(new LogicBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a > x.b, delay=5))
   //CL2 sets a:= a-b, preserving the value of b
   val CL2 = Module(new LogicBlock(dtype(), dtype(), (x: Bundle2[UInt, UInt]) => {
     val y = Wire(dtype())
@@ -72,4 +102,37 @@ class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
   io.out <> DX0.io.out1
 
   R0.io.reset := this.reset.asAsyncReset
+}
+
+class GCDTop extends Module {
+  val io = IO(new Bundle {
+    val in = new ReqAck(new Bundle2(UInt(6.W), UInt(6.W)))
+    val out = Flipped(new ReqAck(UInt(6.W)))
+    val reqIn = Output(Bool())
+    val ackOut = Output(Bool())
+  })
+  val conf = ClickConfig(SIMULATION = false)
+
+  val sync = Module(new InputSync)
+  val gcd = Module(new GCD(6)(conf))
+
+  sync.io.in.req := io.in.req
+  sync.io.in.ack := io.out.ack
+
+  gcd.io.in.req := sync.io.out.req
+  gcd.io.in.data := io.in.data
+  gcd.io.out.ack := sync.io.out.ack
+
+  io.out.data := gcd.io.out.data.a
+  io.out.req := gcd.io.out.req
+
+  io.in.ack := gcd.io.in.ack
+
+  io.reqIn := sync.io.out.req
+  io.ackOut := sync.io.out.ack
+}
+
+object GCD extends App {
+
+  (new ChiselStage).emitVerilog(new GCDTop)
 }

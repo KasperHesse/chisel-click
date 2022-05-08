@@ -3,10 +3,10 @@ package click
 import chisel3._
 
 /**
- * A Fork-component, taking some data as its input and propagating that data to two outputs
- * The output data may either be duplicated on both outputs, or the outputs may get a subset
- * of the input data, as defined by the `fork` function given as parameter
- * Use the companion object to more easily instantiate the simplified version
+ * The Fork component takes some data as its input and propagates that data to two outputs.
+ * The output data may either be duplicated on both outputs, or the outputs may be a subset
+ * of the input data, as defined by the `fork` function given as parameter.
+ * Use the companion object to more easily instantiate the version where both outputs are a duplicate of the input.
  * @param typIn The datatype on the input
  * @param typOut1 The datatype on the first output
  * @param typOut2 The datatype on the second output
