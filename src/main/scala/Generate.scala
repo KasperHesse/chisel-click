@@ -55,6 +55,7 @@ object Generate extends App {
 
   //GENERATE FILES
   gen(Adder(8)(cc))
+  gen(new CDC()(cc))
   gen(new Demultiplexer(UInt(8.W))(cc))
   gen(new Fib(8)(cc))
   gen(new Fifo(5, 8)(cc))
@@ -79,6 +80,7 @@ object Generate extends App {
 
   //Add VCD footers for simulation
   addVcd("Adder")
+  addVcd("CDC")
   addVcd("Demultiplexer")
   addVcd("Fib")
   addVcd("Fifo")

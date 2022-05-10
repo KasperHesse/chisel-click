@@ -15,7 +15,6 @@ class HandshakeRegister[T <: Data](init: T, ri: Boolean = false)(implicit conf: 
   val click = Module(new ClickElement(ri))
   val reg = Module(new CustomClockRegister(init))
 
-
   reg.io.clock := click.io.click
   reg.io.reset := io.reset
   reg.io.in := io.in.data
