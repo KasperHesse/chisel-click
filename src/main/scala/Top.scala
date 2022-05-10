@@ -1,5 +1,6 @@
 import chisel3._
 import chisel3.util._
+import chisel3.experimental.BundleLiterals._
 import chisel3.stage.ChiselStage
 import click._
 import examples._
@@ -31,6 +32,7 @@ object Top extends App {
   }
 
   val conf = ClickConfig()
-  (new ChiselStage).emitVerilog(new CDC()(conf), Array("-td", "gen", "--emission-options", "disableRegisterRandomization"))
+  val b2 = (new Bundle2(UInt(4.W), Bool())).Lit(_.a -> 1.U, _.b -> false.B)
+  (new ChiselStage).emitVerilog(Fifo(4, b2, false)(conf), Array("-td", "gen", "--emission-options", "disableRegisterRandomization"))
   addVcd("CDC")
 }

@@ -27,7 +27,7 @@ class CDC(implicit conf: ClickConfig) extends Module {
   clk2 := Mux(clkCnt === 3.U, !clk2, clk2)
 
   val prod = Module(new Producer)
-  val fifo = Module(new Fifo(4, 1)(conf))
+  val fifo = Module(Fifo(N=4, init=false.B, ri=false))
   val cons = withClock(clk2.asClock) {Module(new Consumer)}
 
   prod.io.din := io.din

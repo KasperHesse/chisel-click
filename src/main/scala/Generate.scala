@@ -58,9 +58,10 @@ object Generate extends App {
   gen(new CDC()(cc))
   gen(new Demultiplexer(UInt(8.W))(cc))
   gen(new Fib(8)(cc))
-  gen(new Fifo(5, 8)(cc))
+  gen(Fifo(5, 0.U(8.W), false)(cc))
   gen(Fork(UInt(8.W))(cc))
   gen(new Fib(8)(cc))
+  gen(new GCD(8)(cc))
   gen(Join(8)(cc))
   gen(JoinReg(8, 4, ri = true)(cc))
   //Simple join-reg-fork block
