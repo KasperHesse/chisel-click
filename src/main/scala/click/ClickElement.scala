@@ -4,9 +4,9 @@ import chisel3._
 
 /**
  * A phase-decoupled click element
- * @param ri Initial value of the out.req signal
+ * @param ro Initial value of the out.req signal
  */
-class ClickElement(ri: Boolean = false) extends RawModule {
+class ClickElement(ro: Boolean = false) extends RawModule {
   val io = IO(new Bundle {
     val reqIn = Input(Bool())
     val ackIn = Output(Bool())
@@ -21,7 +21,7 @@ class ClickElement(ri: Boolean = false) extends RawModule {
   /** Input phase register, driving ack on input channel */
   val Pi = Module(new PhaseRegister(false))
   /** Output phase register, driving req on output channel */
-  val Po = Module(new PhaseRegister(ri))
+  val Po = Module(new PhaseRegister(ro))
 
   Pi.io.in := !Pi.io.out
   Po.io.in := !Po.io.out

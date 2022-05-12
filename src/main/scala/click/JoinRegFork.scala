@@ -12,13 +12,13 @@ import chisel3.util._
  * @param typ2 The datatype of the second input
  * @param init3 The initial value of the first output
  * @param init4 The initial value of the second output
- * @param ri3   The initial value of the first output's out.req signal
- * @param ri4   The initial value of the second output's out.req signal
+ * @param ro3   The initial value of the first output's out.req signal
+ * @param ro4   The initial value of the second output's out.req signal
  * @param joinfork The function used to join input data and fork output data
  *
  */
 class JoinRegFork[T1 <: Data, T2 <: Data, T3 <: Data, T4 <: Data]
-  (typ1: T1, typ2: T2, init3: T3, init4: T4, ri3: Boolean, ri4: Boolean, joinfork: (T1, T2) => (T3, T4))
+  (typ1: T1, typ2: T2, init3: T3, init4: T4, ro3: Boolean, ro4: Boolean, joinfork: (T1, T2) => (T3, T4))
   (implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ1)
@@ -26,12 +26,12 @@ class JoinRegFork[T1 <: Data, T2 <: Data, T3 <: Data, T4 <: Data]
     val out1 = Flipped(new ReqAck(chiselTypeOf(init3)))
     val out2 = Flipped(new ReqAck(chiselTypeOf(init4)))
   })
-  
+
   //Phase registers and data register
   val Pa = Module(new PhaseRegister(false))
   val Pb = Module(new PhaseRegister(false))
-  val Pc = Module(new PhaseRegister(ri3))
-  val Pd = Module(new PhaseRegister(ri4))
+  val Pc = Module(new PhaseRegister(ro3))
+  val Pd = Module(new PhaseRegister(ro4))
   val reg1 = Module(new CustomClockRegister(init3))
   val reg2 = Module(new CustomClockRegister(init4))
   
@@ -79,17 +79,16 @@ object JoinRegFork {
    * and then duplicates this on the output
    * @param widthIn Width of both input channels.
    * @param valueOut Default value of the output channels. Width is 2*widthIn
-   * @param ri Whether the output channel is initialized to have out.req high (true) or low (false)
-   * @param name A custom name to use for this component
+   * @param ro Initial value of the control circuit's out.req signal
    * @param conf Configuration object
    * @return
    */
-  def apply(widthIn: Int, valueOut: Int, ri: Boolean)(implicit conf: ClickConfig): JoinRegFork[UInt, UInt, UInt, UInt] = {
+  def apply(widthIn: Int, valueOut: Int, ro: Boolean)(implicit conf: ClickConfig): JoinRegFork[UInt, UInt, UInt, UInt] = {
     def joinfork(a: UInt, b: UInt): (UInt, UInt) = {
       val c = Cat(a, b)
       (c, c)
     }
-    new JoinRegFork(UInt(widthIn.W), UInt(widthIn.W), valueOut.U((2*widthIn).W), valueOut.U((2*widthIn).W), ri, ri, joinfork)
+    new JoinRegFork(UInt(widthIn.W), UInt(widthIn.W), valueOut.U((2*widthIn).W), valueOut.U((2*widthIn).W), ro, ro, joinfork)
   }
 
   /**
@@ -97,12 +96,12 @@ object JoinRegFork {
    * modifying the data. It can be used as a structure for synchronizing multiple dataflows without affecting
    * the underlying data
    * @param init The initial value of both output channels
-   * @param ri The initial value of both out.req signals
+   * @param ro Initial value of the control circuit's out.req signals
    * @tparam T
    * @return
    */
-  def apply[T <: Data](init: T, ri: Boolean)(implicit conf: ClickConfig): JoinRegFork[T, T, T, T] = {
+  def apply[T <: Data](init: T, ro: Boolean)(implicit conf: ClickConfig): JoinRegFork[T, T, T, T] = {
     require(init.isWidthKnown, "The width of the init signal must be known")
-    new JoinRegFork(chiselTypeOf(init), chiselTypeOf(init), init, init, ri, ri, (a: T, b: T) => (a, b))
+    new JoinRegFork(chiselTypeOf(init), chiselTypeOf(init), init, init, ro, ro, (a: T, b: T) => (a, b))
   }
 }

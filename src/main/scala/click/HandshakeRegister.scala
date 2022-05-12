@@ -5,14 +5,14 @@ import chisel3._
 /**
  * A handshake register, used for implementing asynchronous pipelines
  * @param init The value that the register should initialized to
- * @param ri Initial value of the control circuit's out.req signal
+ * @param ro Initial value of the control circuit's out.req signal
  * @tparam T The type of data stored in the register
  *
  */
-class HandshakeRegister[T <: Data](init: T, ri: Boolean = false)(implicit conf: ClickConfig) extends RawModule {
+class HandshakeRegister[T <: Data](init: T, ro: Boolean = false)(implicit conf: ClickConfig) extends RawModule {
   val io = IO(new HandshakeIO(chiselTypeOf(init)))
 
-  val click = Module(new ClickElement(ri))
+  val click = Module(new ClickElement(ro))
   val reg = Module(new CustomClockRegister(init))
 
   reg.io.clock := click.io.click

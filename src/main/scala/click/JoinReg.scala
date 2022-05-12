@@ -10,14 +10,14 @@ import chisel3.util._
  * @param typ1 The type of the first input
  * @param typ2 The type of the second input
  * @param init3 The initial/reset value of the output register
- * @param ri Initial value of the control circuit's out.req signal
+ * @param ro Initial value of the control circuit's out.req signal
  * @param join The function used to join the two input stream's data
  * @tparam T1
  * @tparam T2
  * @tparam T3
  */
 class JoinReg[T1 <: Data, T2 <: Data, T3 <: Data]
-(typ1: T1, typ2: T2, init3: T3, ri: Boolean, join: (T1, T2) => T3)
+(typ1: T1, typ2: T2, init3: T3, ro: Boolean, join: (T1, T2) => T3)
 (implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ1)
@@ -29,7 +29,7 @@ class JoinReg[T1 <: Data, T2 <: Data, T3 <: Data]
     conf.REG_DELAY + conf.FORK_DELAY/2).asClock
   val Pa = Module(new PhaseRegister(false))
   val Pb = Module(new PhaseRegister(false))
-  val Pc = Module(new PhaseRegister(ri))
+  val Pc = Module(new PhaseRegister(ro))
   val reg = Module(new CustomClockRegister(init3))
 
   Pa.io.clock := click
@@ -61,10 +61,10 @@ object JoinReg {
    * two inputs. Input 1 is placed in the MSB of the output, input 2 in the LSB
    * @param widthIn Width of the input channels
    * @param defaultOut Default/reset value of the output
-   * @param ri Whether out.req should reset to true or false
+   * @param ro Initial value of the control circuit's out.req signal
    * @return
    */
-  def apply(widthIn: Int, defaultOut: Int, ri: Boolean)(implicit conf: ClickConfig): JoinReg[UInt, UInt, UInt] = {
-    new JoinReg(UInt(widthIn.W), UInt(widthIn.W), defaultOut.U((2*widthIn).W), ri, (a: UInt, b: UInt) => Cat(a,b))
+  def apply(widthIn: Int, defaultOut: Int, ro: Boolean)(implicit conf: ClickConfig): JoinReg[UInt, UInt, UInt] = {
+    new JoinReg(UInt(widthIn.W), UInt(widthIn.W), defaultOut.U((2*widthIn).W), ro, (a: UInt, b: UInt) => Cat(a,b))
   }
 }

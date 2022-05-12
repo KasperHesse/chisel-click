@@ -4,22 +4,22 @@ import chisel3._
 import click._
 
 /**
- * An N-stage fifo where each register may have custom initial values and starting phases.
+ * An N-stage FIFO where each register may have custom initial values and starting phases.
  * To generate a FIFO where all stages have the same initial value and same initial out.req-signal, use
  * the companion object
- * @param N The number of stages in the fifo
- * @param init The initial value of each stage in the fifo. init.length must equal N
- * @param ri   The initial value of the out.req signal of each fifo stage. ri.length must equal N
+ * @param N The number of stages in the FIFO
+ * @param init The initial value of each stage in the FIFO. init.length must equal N
+ * @param ro   The initial value of the out.req signal of each FIFO stage. ro.length must equal N
  */
-class Fifo[T <: Data](N: Int, init: Seq[T], ri: Seq[Boolean])(implicit conf: ClickConfig) extends RawModule {
+class Fifo[T <: Data](N: Int, init: Seq[T], ro: Seq[Boolean])(implicit conf: ClickConfig) extends RawModule {
   require(N > 0, "Number of stages must be positive")
   require(N == init.length, "Seq of initial values must equal length of FIFO")
-  require(N == ri.length, "Seq of initial out.req-values must equal length of FIFO")
+  require(N == ro.length, "Seq of initial out.req-values must equal length of FIFO")
 
   val io = IO(new HandshakeIO(chiselTypeOf(init(0))))
 
   val stages = for(i <- 0 until N) yield {
-    Module(new HandshakeRegister(init(i), ri(i)))
+    Module(new HandshakeRegister(init(i), ro(i)))
   }
 
   for(i <- 0 until stages.length - 1) {
@@ -38,11 +38,11 @@ object Fifo {
    * Creates an N-stage FIFO where all registers are initialized to the same values
    * @param N The number of stages in the FIFO
    * @param init The initial value of each data register in the FIFO
-   * @param ri The initial value of each click element's out.req signal
+   * @param ro The initial value of each click element's out.req signal
    */
-  def apply[T <: Data](N: Int, init: T, ri: Boolean)(implicit conf: ClickConfig) : Fifo[T]= {
+  def apply[T <: Data](N: Int, init: T, ro: Boolean)(implicit conf: ClickConfig) : Fifo[T]= {
     val inits = Seq.fill(N)(init)
-    val ris = Seq.fill(N)(ri)
+    val ris = Seq.fill(N)(ro)
     new Fifo(N, inits, ris)
   }
 }

@@ -3,7 +3,7 @@ package click
 import chisel3._
 
 /**
- * A register which uses a custom clock signal instead of the global clock signal
+ * A register which uses a custom clock signal instead of the global clock signal.
  * Has an asynchronous, active-high reset signal
  * @param init The initial value of the register
  */

@@ -63,9 +63,9 @@ object Generate extends App {
   gen(new Fib(8)(cc))
   gen(new GCD(8)(cc))
   gen(Join(8)(cc))
-  gen(JoinReg(8, 4, ri = true)(cc))
+  gen(JoinReg(8, 4, ro = true)(cc))
   //Simple join-reg-fork block
-  gen(JoinRegFork(widthIn=8, valueOut=0, ri=false)(cc))
+  gen(JoinRegFork(widthIn=8, valueOut=0, ro=false)(cc))
   renameModule("JoinRegFork", "JRF_simple")
   //The complex JRF uses different phases on the output ports and performs bit-moving between the inputs and outputs
   gen(new JoinRegFork(UInt(8.W), UInt(10.W), 0.U(4.W), 4.U(14.W), false, true, (a: UInt, b: UInt) => {
