@@ -10,6 +10,7 @@ package click
  * @param MERGE_DELAY Simulation delay of merge components
  * @param JOIN_DELAY Simulation delay of join components
  * @param FORK_DELAY Simulation delay of fork components
+ * @param COMP_DELAY Simulation delay of comparator modules (>, =/=, etc)
  * @param SIMULATION Controls whether to instantiate simulation or synthesis-based delay elements
  */
 case class ClickConfig(
@@ -20,5 +21,6 @@ case class ClickConfig(
                       MERGE_DELAY: Int = 2,
                       JOIN_DELAY: Int = 2,
                       FORK_DELAY: Int = 2,
+                      COMP_DELAY: Int = 2,
                       SIMULATION: Boolean = true
                       )

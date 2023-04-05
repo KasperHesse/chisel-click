@@ -4,18 +4,18 @@ import chisel3._
 import chisel3.util._
 
 /**
- * A generic logic block that can be used to create a logic function.
- * This logic block takes a function as its argument, using that function to drive the output.
- * It should only be used for simple functions - for more complex logic blocks,
- * consider using [[LogicBlockMod]] which instantiates a Module to drive its outputs
+ * A generic function block that can be used to create a logic function.
+ * This block takes a function as its argument, using that function to drive the output.
+ * It should only be used for simple functions - for more complex function blocks,
+ * consider using [[LogicModule]] which instantiates a Module to drive its outputs
  * @param gen1 The datatype on the input
  * @param gen2 The datatype on the output
  * @param f The function to compute
  * @param delay The delay to use for the logic block's request signal
- * @tparam T1 The type of input arguments. They are assumed to be the same
- * @tparam T2 The type of output argument
+ * @tparam T1 The type of input arguments.
+ * @tparam T2 The type of output arguments
  */
-class LogicBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay: Int)(implicit conf: ClickConfig) extends Module {
+class FunctionBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay: Int)(implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in = new ReqAck(gen1)
     val out = Flipped(new ReqAck(gen2))
@@ -28,8 +28,7 @@ class LogicBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay:
 }
 
 /**
- * A logic block implementing an adder.
- * The adder consists of a Join-block, followed by a Logic block implementing addition
+ * The adder consists of a Join-block, followed by a function block implementing addition
  * @param gen1 Type of the first data input
  * @param gen2 Type of the second data input
  * @param gen3 Type of the data output
@@ -53,7 +52,7 @@ class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3, de
     r
   }))
 
-  val logic = Module(new LogicBlock(new Bundle2(gen1, gen2), gen3, (in: Bundle2[T1, T2]) => in.a.asUInt + in.b.asUInt, if(delay == -1) conf.ADD_DELAY else delay))
+  val logic = Module(new FunctionBlock(new Bundle2(gen1, gen2), gen3, (in: Bundle2[T1, T2]) => in.a.asUInt + in.b.asUInt, if(delay == -1) conf.ADD_DELAY else delay))
 
   join.io.in1 <> io.in1
   join.io.in2 <> io.in2

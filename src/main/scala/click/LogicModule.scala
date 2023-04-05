@@ -7,27 +7,29 @@ import scala.collection.immutable.SeqMap
 
 /**
  * This trait must be added to modules containing logic function which should be embedded in a [[LogicModule]]
- * The functions `setInput` and `getOutput` should be used to drive the inputs
- * and retrieve outputs from the embedded module
+ * The functions `getInput` and `getOutput` should be used to get a handle to the input and output signals
+ * of the module.
  * @tparam T1
  * @tparam T2
  */
 trait IsLogicModule[T1 <: Data, T2 <: Data] {
   /**
-   * Drives the inputs of the module implementing a logic function
-   * @param inp The input from the [[LogicModule]] (`io.in.data`)
+   * Gets a handle to the input port of the module implementing a logic function.
+   * This allows it to be driven by the wrapping LogicModule
+   * @return The input port
    */
-  def setInputs(inp: T1): Unit
+  def getInput(): T1
 
   /**
-   * Drives the outputs of the wrapping LogicModule
-   * @param out The output port `io.out.data` from the wrapping LogicModule
+   * Gets a handle to the output port of the module implementing a logic function.
+   * This allows the output to drive the output of the wrapping LogicModule
+   * @return The output port
    */
-  def setOutputs(out: T2): Unit
+  def getOutput(): T2
 }
 
 /**
- * A variant on [[LogicBlock]] where the logic function is implemented in another Module.
+ * A variant on [[FunctionBlock]] where the logic function is implemented in another Module.
  * This serves to easily migrate existing logic components into an asynchronous pipeline, as a LogicModule
  * wraps the logic with a req/ack handshake for asynchronous implementation
  * @param typ1 The datatype on the input of the logic module
@@ -44,8 +46,10 @@ class LogicModule[T1 <: Data, T2 <: Data](typ1: T1, typ2: T2, mdl: => RawModule 
   })
 
   val logic = mdl
-  logic.setInputs(io.in.data)
-  logic.setOutputs(io.out.data)
+
+  //Functions are used to connect inputs and outputs of wrapping and wrapped module
+  logic.getInput() := io.in.data
+  io.out.data := logic.getOutput()
   io.in.ack := io.out.ack
   io.out.req := synthDelay(io.in.req, delay)
 }

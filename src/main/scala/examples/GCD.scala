@@ -6,6 +6,8 @@ import chisel3.experimental.BundleLiterals._
 import chisel3.stage.ChiselStage
 import chisel3.util.{RegEnable, log2Ceil}
 
+
+
 /**
  * Input synchronizer for using the debounced PMOD push buttons on the
  * [[https://digilent.com/shop/pmod-btn-4-user-pushbuttons/ PB200-077 module]]
@@ -53,20 +55,16 @@ class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
   val F0 = Module(Fork(Bool()))
 
   //CL1 implements a != b, used to track if execution has finished
-  val CL0 = Module(new LogicBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a =/= x.b, delay=5))
+  val CL0 = Module(new FunctionBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a =/= x.b, delay=conf.COMP_DELAY))
   //CL1 implements a>b, used to select whether to update the value of A or B through the loop
-  val CL1 = Module(new LogicBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a > x.b, delay=5))
+  val CL1 = Module(new FunctionBlock(dtype(), Bool(), (x: Bundle2[UInt, UInt]) => x.a > x.b, delay=conf.COMP_DELAY))
   //CL2 sets a:= a-b, preserving the value of b
-  val CL2 = Module(new LogicBlock(dtype(), dtype(), (x: Bundle2[UInt, UInt]) => {
-    val y = Wire(dtype())
-    y.a := x.a - x.b
-    y.b := x.b
+  val CL2 = Module(new FunctionBlock(dtype(), dtype(), (x: Bundle2[UInt, UInt]) => {
+    val y = Wire(dtype()); y.a :=  x.a - x.b; y.b := x.b
     y
   }, delay=conf.ADD_DELAY))
-  val CL3 = Module(new LogicBlock(dtype(), dtype(), (x: Bundle2[UInt, UInt]) => {
-    val y = Wire(dtype())
-    y.a := x.a
-    y.b := x.b - x.a
+  val CL3 = Module(new FunctionBlock(dtype(), dtype(), (x: Bundle2[UInt, UInt]) => {
+    val y = Wire(dtype()); y.a :=  x.a; y.b := x.b - x.a
     y
   }, delay=conf.ADD_DELAY))
 

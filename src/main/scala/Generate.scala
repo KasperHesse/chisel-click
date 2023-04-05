@@ -45,13 +45,11 @@ object Generate extends App {
   }
 
   def gen(x: => RawModule): Unit = {
-
-    val params = Array("-td", "gen", "--emission-options", "disableRegisterRandomization")
-    val cs = new ChiselStage
-    cs.emitVerilog(x, params)
+    val params = Array("-td", "gen", "--emission-options", "disableRegisterRandomization", "--no-check-comb-loops")
+    (new ChiselStage).emitVerilog(x, params)
   }
 
-  val cc = ClickConfig()
+  implicit val cc = ClickConfig()
 
   //GENERATE FILES
   gen(Adder(8)(cc))
@@ -77,6 +75,10 @@ object Generate extends App {
   gen(new Merge(UInt(8.W))(cc))
   gen(new Multiplexer(UInt(8.W))(cc))
   gen(RegFork(4.U(8.W), false)(cc))
+  gen(new BistableMutex()(cc))
+  gen(new RGDMutex()(cc))
+  gen(new Arbiter(UInt(8.W)))
+
 
 
   //Add VCD footers for simulation
@@ -93,4 +95,7 @@ object Generate extends App {
   addVcd("Merge")
   addVcd("Multiplexer")
   addVcd("RegFork")
+  addVcd("BistableMutex")
+  addVcd("RGDMutex")
+  addVcd("Arbiter")
 }

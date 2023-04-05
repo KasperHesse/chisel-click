@@ -52,4 +52,8 @@ object Join {
     }
     new Join[UInt, UInt, UInt](UInt(width.W), UInt(width.W), UInt((2*width).W), join)
   }
+
+  def apply()(implicit conf: ClickConfig): Join[UInt, UInt, UInt] = {
+    new Join(UInt(8.W),UInt(8.W), UInt(8.W), (a,b) => a ## b)
+  }
 }
