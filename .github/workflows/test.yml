@@ -8,14 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Cleanup
-        run: sed -i "s/%NAME%/test/g" build.sc
+        uses: actions/checkout@v3
       - name: Setup Scala
-        uses: olafurpg/setup-scala@v10
+        uses: actions/setup-java@v3
         with:
-          java-version: adopt@1.8
-      - name: Cache Scala
-        uses: coursier/cache-action@v5
-      - name: SBT Test
-        run: sbt test
+          distribution: 'adopt'
+          java-version: 11
+          cache: 'sbt'
+      - name: Setup python
+        uses: actions/setup-python@v4
+      - name: Install icarus
+        run: sudo apt install -y --no-install-recommends iverilog
+      - name: Install cocotb
+        run: pip install cocotb
+      - name: Generate verilog files
+        run: make gen
+      - name: Run tests
+        run: make test
