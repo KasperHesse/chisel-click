@@ -23,5 +23,7 @@ jobs:
         run: pip install cocotb
       - name: Generate verilog files
         run: make gen
-      - name: Run tests
+      - name: Run cocotb tests
         run: make test
+      - name: Run SBT test
+        run: sbt test
