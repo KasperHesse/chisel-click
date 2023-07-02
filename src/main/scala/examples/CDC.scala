@@ -9,7 +9,7 @@ import click._
  * An example of clock-domain crossing using the asynchronous click elements
  * This example uses a 4-deep asynchronous FIFO to transfer data between a producer and a consumer
  */
-class CDC(implicit conf: ClickConfig) extends Module {
+class CDC(implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val din = Input(UInt(8.W))
     val valid = Input(Bool())
@@ -34,10 +34,7 @@ class CDC(implicit conf: ClickConfig) extends Module {
   prod.io.valid := v
   prod.io.out <> fifo.io.in
   fifo.io.out <> cons.io.in
-  fifo.io.reset := this.reset.asAsyncReset
   io.dout := cons.io.dout
-
-
 }
 
 /**
@@ -86,7 +83,7 @@ class Producer extends Module {
 /**
  * The consumer is a serial-to-parallel converter, receiving a byte over the asynchronous link
  */
-class Consumer extends Module {
+class Consumer extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in = new ReqAck(Bool())
     val dout = Output(UInt(8.W))

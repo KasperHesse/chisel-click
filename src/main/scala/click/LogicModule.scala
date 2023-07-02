@@ -39,7 +39,8 @@ trait IsLogicModule[T1 <: Data, T2 <: Data] {
  * @tparam T1
  * @tparam T2
  */
-class LogicModule[T1 <: Data, T2 <: Data](typ1: T1, typ2: T2, mdl: => RawModule with IsLogicModule[T1, T2], delay: Int)(implicit conf: ClickConfig) extends Module {
+class LogicModule[T1 <: Data, T2 <: Data](typ1: T1, typ2: T2, mdl: => RawModule with IsLogicModule[T1, T2], delay: Int)
+                                         (implicit conf: ClickConfig) extends Module {
   val io = IO(new Bundle {
     val in = new ReqAck(typ1)
     val out = Flipped(new ReqAck(typ2))

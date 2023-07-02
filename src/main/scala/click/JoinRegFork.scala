@@ -17,9 +17,9 @@ import chisel3.util._
  * @param joinfork The function used to join input data and fork output data
  *
  */
-class JoinRegFork[T1 <: Data, T2 <: Data, T3 <: Data, T4 <: Data]
-  (typ1: T1, typ2: T2, init3: T3, init4: T4, ro3: Boolean, ro4: Boolean, joinfork: (T1, T2) => (T3, T4))
-  (implicit conf: ClickConfig) extends Module {
+class JoinRegFork[T1 <: Data, T2 <: Data, T3 <: Data, T4 <: Data](typ1: T1, typ2: T2, init3: T3, init4: T4, ro3: Boolean, ro4: Boolean)
+                                                                 (joinfork: (T1, T2) => (T3, T4))
+                                                                 (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ1)
     val in2 = new ReqAck(typ2)
@@ -39,26 +39,20 @@ class JoinRegFork[T1 <: Data, T2 <: Data, T3 <: Data, T4 <: Data]
   val click = simDelay((io.in1.req ^ io.in1.ack) && (io.in2.req ^ io.in2.ack) && !(io.out1.req ^ io.out1.ack) && !(io.out2.req ^ io.out2.ack),
     conf.REG_DELAY + (conf.FORK_DELAY+conf.JOIN_DELAY)/2).asClock
   
-  Pa.io.clock := click
-  Pa.io.reset := this.reset.asAsyncReset
+  Pa.clock := click
   Pa.io.in := !Pa.io.out
 
-  Pb.io.clock := click
-  Pb.io.reset := this.reset.asAsyncReset
+  Pb.clock := click
   Pb.io.in := !Pb.io.out
   
-  Pc.io.clock := click
-  Pc.io.reset := this.reset.asAsyncReset
+  Pc.clock := click
   Pc.io.in := !Pc.io.out
   
-  Pd.io.clock := click
-  Pd.io.reset := this.reset.asAsyncReset
+  Pd.clock := click
   Pd.io.in := !Pd.io.out
   
-  reg1.io.clock := click
-  reg1.io.reset := this.reset.asAsyncReset
-  reg2.io.clock := click
-  reg2.io.reset := this.reset.asAsyncReset
+  reg1.clock := click
+  reg2.clock := click
 
   val (din1, din2) = joinfork(io.in1.data, io.in2.data)
   reg1.io.in := din1
@@ -88,7 +82,7 @@ object JoinRegFork {
       val c = Cat(a, b)
       (c, c)
     }
-    new JoinRegFork(UInt(widthIn.W), UInt(widthIn.W), valueOut.U((2*widthIn).W), valueOut.U((2*widthIn).W), ro, ro, joinfork)
+    new JoinRegFork(UInt(widthIn.W), UInt(widthIn.W), valueOut.U((2*widthIn).W), valueOut.U((2*widthIn).W), ro, ro)(joinfork)
   }
 
   /**
@@ -102,6 +96,6 @@ object JoinRegFork {
    */
   def apply[T <: Data](init: T, ro: Boolean)(implicit conf: ClickConfig): JoinRegFork[T, T, T, T] = {
     require(init.isWidthKnown, "The width of the init signal must be known")
-    new JoinRegFork(chiselTypeOf(init), chiselTypeOf(init), init, init, ro, ro, (a: T, b: T) => (a, b))
+    new JoinRegFork(chiselTypeOf(init), chiselTypeOf(init), init, init, ro, ro)((a,b) => (a, b))
   }
 }

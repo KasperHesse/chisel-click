@@ -13,7 +13,8 @@ import chisel3._
  * @param conf Configuration object
  * @tparam T
  */
-class Multiplexer[T <: Data](gen: T)(implicit conf: ClickConfig) extends Module {
+class Multiplexer[T <: Data](gen: T)
+                            (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(gen)
     val in2 = new ReqAck(gen)
@@ -33,11 +34,6 @@ class Multiplexer[T <: Data](gen: T)(implicit conf: ClickConfig) extends Module 
   Pc.io.in := !Pc.io.out
   Ps.io.in := io.sel.req
 
-  Pa.io.reset := this.reset.asAsyncReset
-  Pb.io.reset := this.reset.asAsyncReset
-  Pc.io.reset := this.reset.asAsyncReset
-  Ps.io.reset := this.reset.asAsyncReset
-
   //Clock for phase registers
   val selX = io.sel.req ^ io.sel.ack
   val in1X = io.in1.req ^ io.in1.ack
@@ -45,10 +41,10 @@ class Multiplexer[T <: Data](gen: T)(implicit conf: ClickConfig) extends Module 
   val clickIn = (!(io.out.ack ^ io.out.req)).asClock
   val clickOut = (selX && io.sel.data && in2X) || (selX && !io.sel.data && in1X)
 
-  Pa.io.clock := clickIn
-  Pb.io.clock := clickIn
-  Ps.io.clock := clickIn
-  Pc.io.clock := clickOut.asClock
+  Pa.clock := clickIn
+  Pb.clock := clickIn
+  Ps.clock := clickIn
+  Pc.clock := clickOut.asClock
 
   //Drive outputs
   io.in1.ack := Pa.io.out

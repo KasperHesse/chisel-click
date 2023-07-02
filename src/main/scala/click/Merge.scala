@@ -9,7 +9,8 @@ import chisel3._
  * @param typ The type of data to use on this channel
  * @tparam T
  */
-class Merge[T <: Data](typ: T)(implicit conf: ClickConfig) extends Module {
+class Merge[T <: Data](typ: T)
+                      (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ)
     val in2 = new ReqAck(typ)
@@ -27,16 +28,13 @@ class Merge[T <: Data](typ: T)(implicit conf: ClickConfig) extends Module {
   val clickOut = selA || selB
 
   Pa.io.in := io.in1.req
-  Pa.io.reset := this.reset.asAsyncReset
-  Pa.io.clock := clickIn.asClock
+  Pa.clock := clickIn.asClock
 
   Pb.io.in := io.in2.req
-  Pb.io.reset := this.reset.asAsyncReset
-  Pb.io.clock := clickIn.asClock
+  Pb.clock := clickIn.asClock
 
   Pc.io.in := !Pc.io.out
-  Pc.io.reset := this.reset.asAsyncReset
-  Pc.io.clock := clickOut.asClock
+  Pc.clock := clickOut.asClock
 
   io.in1.ack := Pa.io.out
   io.in2.ack := Pb.io.out

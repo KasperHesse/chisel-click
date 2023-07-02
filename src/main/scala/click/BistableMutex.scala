@@ -10,7 +10,7 @@ import examples.Fifo
  * for mutexes. The done signal is in practice implemented through the acknowledge from the consumer
  * @param conf
  */
-class RGDMutex(implicit conf: ClickConfig) extends Module {
+class RGDMutex(implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val R1 = Input(Bool())
     val D1 = Input(Bool())
@@ -25,6 +25,7 @@ class RGDMutex(implicit conf: ClickConfig) extends Module {
     Module(new PhaseRegister(false))
   }
 
+
   //Setup mutex inputs
   val mutex = Module(new BistableMutex())
   mutex.io.R1 := regs(0).io.out ^ io.D1
@@ -33,17 +34,17 @@ class RGDMutex(implicit conf: ClickConfig) extends Module {
   //Register clocking
   val clock1 = ((regs(0).io.out & !io.R1 & regs(1).io.out) | (!regs(0).io.out & io.R1 & !regs(1).io.out)).asClock
   val clock2 = ((regs(3).io.out & !io.R2 & regs(4).io.out) | (!regs(3).io.out & io.R2 & !regs(4).io.out)).asClock
-  regs(0).io.clock := clock1
-  regs(1).io.clock := (!mutex.io.G1).asClock
-  regs(2).io.clock := mutex.io.G1.asClock
-  regs(3).io.clock := clock2
-  regs(4).io.clock := (!mutex.io.G2).asClock
-  regs(5).io.clock := mutex.io.G2.asClock
+  regs(0).clock := clock1
+  regs(1).clock := (!mutex.io.G1).asClock
+  regs(2).clock := mutex.io.G1.asClock
+  regs(3).clock := clock2
+  regs(4).clock := (!mutex.io.G2).asClock
+  regs(5).clock := mutex.io.G2.asClock
 
   //Register inputs
   for(reg <- regs) {
     reg.io.in := !reg.io.out
-    reg.io.reset := this.reset.asAsyncReset
+//    reg.io.reset := this.reset.asAsyncReset
   }
 
   //Outputs
@@ -58,7 +59,8 @@ class RGDMutex(implicit conf: ClickConfig) extends Module {
  * @param dR1 Delay from request R1 goes high until grant G1 may toggle. Defaults to 0 (no delay)
  * @param dR2 Delay from request R2 goes high until grant G2 may toggle. Defaults to 0 (no delay)
  */
-class BistableMutex(val dR1: Int = 0, val dR2: Int = 0)(implicit conf: ClickConfig) extends Module {
+class BistableMutex(val dR1: Int = 0, val dR2: Int = 0)
+                   (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val R1 = Input(Bool())
     val R2 = Input(Bool())

@@ -15,7 +15,9 @@ import chisel3._
  * @tparam T2
  * @tparam T3
  */
-class Join[T1 <: Data, T2 <: Data, T3 <: Data](typIn1: T1, typIn2: T2, typOut: T3, join: (T1, T2) => T3)(implicit conf: ClickConfig) extends Module {
+class Join[T1 <: Data, T2 <: Data, T3 <: Data](typIn1: T1, typIn2: T2, typOut: T3)
+                                              (join: (T1, T2) => T3)
+                                              (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typIn1)
     val in2 = new ReqAck(typIn2)
@@ -25,8 +27,7 @@ class Join[T1 <: Data, T2 <: Data, T3 <: Data](typIn1: T1, typIn2: T2, typOut: T
   val click = (!io.out.req && io.in1.req && io.in2.req) || (io.out.req && !io.in1.req && !io.in2.req)
   val phase = Module(new PhaseRegister(false))
 
-  phase.io.clock := click.asClock
-  phase.io.reset := this.reset.asAsyncReset
+  phase.clock := click.asClock
   phase.io.in := !phase.io.out
 
   io.out.req := simDelay(phase.io.out, conf.JOIN_DELAY)
@@ -50,10 +51,10 @@ object Join {
     def join(in1: UInt, in2: UInt): UInt = {
       util.Cat(in2, in1)
     }
-    new Join[UInt, UInt, UInt](UInt(width.W), UInt(width.W), UInt((2*width).W), join)
+    new Join(UInt(width.W), UInt(width.W), UInt((2*width).W))(join)
   }
 
   def apply()(implicit conf: ClickConfig): Join[UInt, UInt, UInt] = {
-    new Join(UInt(8.W),UInt(8.W), UInt(8.W), (a,b) => a ## b)
+    new Join(UInt(8.W),UInt(8.W), UInt(8.W))((a,b) => a ## b)
   }
 }

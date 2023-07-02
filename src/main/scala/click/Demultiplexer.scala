@@ -12,7 +12,8 @@ import chisel3._
  * as the behavior of the select-signal has been flipped
  * @param gen The datatype switched by this demultiplexer
  */
-class Demultiplexer[T <: Data](gen: T)(implicit conf: ClickConfig) extends Module {
+class Demultiplexer[T <: Data](gen: T)
+                              (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in = new ReqAck(gen)
     val sel = new ReqAck(Bool())
@@ -30,16 +31,13 @@ class Demultiplexer[T <: Data](gen: T)(implicit conf: ClickConfig) extends Modul
   val clickOut = simDelay((io.in.req ^ io.in.ack) && (io.sel.req ^ io.sel.ack), conf.DEMUX_DELAY).asClock
 
   //Inputs to phase registers
-  Pa.io.clock := clickIn
-  Pa.io.reset := this.reset.asAsyncReset
+  Pa.clock := clickIn
   Pa.io.in := !Pa.io.out
 
-  Pb.io.clock := clickOut
-  Pb.io.reset := this.reset.asAsyncReset
+  Pb.clock := clickOut
   Pb.io.in := !io.sel.data ^ Pb.io.out
 
-  Pc.io.clock := clickOut
-  Pc.io.reset := this.reset.asAsyncReset
+  Pc.clock := clickOut
   Pc.io.in := io.sel.data ^ Pc.io.out
 
   //Outputs
