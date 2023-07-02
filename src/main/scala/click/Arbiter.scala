@@ -9,7 +9,7 @@ import chisel3._
  * @param conf
  * @tparam T
  */
-class Arbiter[T <: Data](typ: T)(implicit conf: ClickConfig) extends Module {
+class Arbiter[T <: Data](typ: T)(implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ)
     val in2 = new ReqAck(typ)

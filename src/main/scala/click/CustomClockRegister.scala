@@ -4,18 +4,18 @@ import chisel3._
 
 /**
  * A register which uses a custom clock signal instead of the global clock signal.
+ * Used such that we don't have to use withClock{...} every time we want a custom clock signal,
+ * as that doesn't fit as well with the structural design of async. circuits.
  * Has an asynchronous, active-high reset signal
  * @param init The initial value of the register
  */
-class CustomClockRegister[T <: Data](init: T) extends RawModule {
+class CustomClockRegister[T <: Data](init: T) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
-    val clock = Input(Clock())
-    val reset = Input(AsyncReset())
     val in = Input(chiselTypeOf(init))
     val out = Output(chiselTypeOf(init))
   })
 
-  io.out := withClockAndReset(io.clock, io.reset) {RegNext(io.in, WireInit(init))}
+  io.out := RegNext(io.in, WireInit(init))
 }
 
 /**

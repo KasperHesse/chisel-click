@@ -78,8 +78,6 @@ package object click {
   class HandshakeIO[T <: Data](typ: T) extends Bundle {
     /** Handshake on input */
     val in = new ReqAck(typ)
-    /** Input reset signal */
-    val reset = Input(AsyncReset())
     /** Handshake on output */
     val out = Flipped(new ReqAck(typ))
   }

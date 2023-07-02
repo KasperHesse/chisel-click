@@ -15,7 +15,7 @@ import chisel3.util._
  * @tparam T1 The type of input arguments.
  * @tparam T2 The type of output arguments
  */
-class FunctionBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay: Int)(implicit conf: ClickConfig) extends Module {
+class FunctionBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, delay: Int)(implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in = new ReqAck(gen1)
     val out = Flipped(new ReqAck(gen2))
@@ -38,14 +38,15 @@ class FunctionBlock[T1 <: Data, T2 <: Data](gen1: T1, gen2: T2, f: T1 => T2, del
  * @tparam T2
  * @tparam T3
  */
-class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3, delay: Int = -1)(implicit conf: ClickConfig) extends Module {
+class Adder[T1 <: Bits, T2 <: Bits, T3 <: Bits](gen1: T1, gen2: T2, gen3: T3, delay: Int = -1)
+                                               (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(gen1)
     val in2 = new ReqAck(gen2)
     val out = Flipped(new ReqAck(gen3))
   })
 
-  val join = Module(new Join(gen1, gen2, new Bundle2(gen1, gen2), (a: T1, b: T2) => {
+  val join = Module(new Join(gen1, gen2, new Bundle2(gen1, gen2))((a,b) => {
     val r = Wire(new Bundle2(gen1, gen2))
     r.a := a
     r.b := b

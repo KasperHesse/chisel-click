@@ -13,9 +13,9 @@ import chisel3._
  * @param ro3 Initial value of the second output's out.req signal
  * @param fork The function used to implement the forking behavior
  */
-class RegFork[T1 <: Data, T2 <: Data, T3 <: Data]
-  (typ1: T1, init2: T2, init3: T3, ro2: Boolean, ro3: Boolean, fork: T1 => (T2, T3))
-  (implicit conf: ClickConfig) extends Module {
+class RegFork[T1 <: Data, T2 <: Data, T3 <: Data](typ1: T1, init2: T2, init3: T3, ro2: Boolean, ro3: Boolean)
+                                                 (fork: T1 => (T2, T3))
+                                                 (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
 
   val io = IO(new Bundle {
     val in = new ReqAck(typ1)
@@ -34,24 +34,19 @@ class RegFork[T1 <: Data, T2 <: Data, T3 <: Data]
   //Clocking logic
   val click = simDelay((io.in.req ^ io.in.ack) && !(io.out1.req ^ io.out1.ack) && !(io.out2.req ^ io.out2.ack),
     conf.REG_DELAY + conf.FORK_DELAY/2).asClock
-  Pa.io.clock := click
-  Pa.io.reset := this.reset.asAsyncReset
+  Pa.clock := click
   Pa.io.in := !Pa.io.out
 
-  Pb.io.clock := click
-  Pb.io.reset := this.reset.asAsyncReset
+  Pb.clock := click
   Pb.io.in := !Pb.io.out
 
-  Pc.io.clock := click
-  Pc.io.reset := this.reset.asAsyncReset
+  Pc.clock := click
   Pc.io.in := !Pc.io.out
 
   val (din1, din2) = fork(io.in.data)
-  reg1.io.clock := click
-  reg1.io.reset := this.reset.asAsyncReset
+  reg1.clock := click
   reg1.io.in := din1
-  reg2.io.clock := click
-  reg2.io.reset := this.reset.asAsyncReset
+  reg2.clock := click
   reg2.io.in := din2
 
   //Outputs
@@ -73,6 +68,6 @@ object RegFork {
    */
   def apply[T <: Data](init: T, ro: Boolean)(implicit conf: ClickConfig): RegFork[T, T, T] = {
     require(init.isWidthKnown, "The width of the init signal must be known")
-    new RegFork(chiselTypeOf(init), init, init, ro, ro, (a: T) => (a, a))
+    new RegFork(chiselTypeOf(init), init, init, ro, ro)(a => (a, a))
   }
 }

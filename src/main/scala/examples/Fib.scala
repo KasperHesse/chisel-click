@@ -8,7 +8,7 @@ import click._
  * A Fibonacci circuit
  * @param dataWidth Width of the data being passed around the circuit
  */
-class Fib(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
+class Fib(dataWidth: Int)(implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val go = Input(Bool())
     val out = Flipped(new ReqAck(UInt(dataWidth.W)))
@@ -32,7 +32,6 @@ class Fib(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
   RF1.io.out2 <> add.io.in2
 
   //Handle resets and barrier signal
-  R0.io.reset := this.reset.asAsyncReset
   add.io.in2.req := RF1.io.out2.req && io.go
 }
 

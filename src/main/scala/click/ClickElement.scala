@@ -6,13 +6,12 @@ import chisel3._
  * A phase-decoupled click element
  * @param ro Initial value of the out.req signal
  */
-class ClickElement(ro: Boolean = false) extends RawModule {
+class ClickElement(ro: Boolean = false) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val reqIn = Input(Bool())
     val ackIn = Output(Bool())
     val reqOut = Output(Bool())
     val ackOut = Input(Bool())
-    val reset = Input(AsyncReset())
     val click = Output(Clock())
   })
 
@@ -26,10 +25,8 @@ class ClickElement(ro: Boolean = false) extends RawModule {
   Pi.io.in := !Pi.io.out
   Po.io.in := !Po.io.out
 
-  Pi.io.clock := click.asClock
-  Po.io.clock := click.asClock
-  Pi.io.reset := io.reset
-  Po.io.reset := io.reset
+  Pi.clock := click.asClock
+  Po.clock := click.asClock
 
   io.ackIn := Pi.io.out
   io.reqOut := Po.io.out

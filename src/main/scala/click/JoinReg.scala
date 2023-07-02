@@ -3,6 +3,7 @@ package click
 import chisel3._
 import chisel3.util._
 
+
 /**
  * The JoinReg block utilizes peephole optimizations to implement a join block and register in the same module.
  * The JoinReg-module supports any type of forking behavior, but if a simpler behavior is wanted (such as two
@@ -16,9 +17,9 @@ import chisel3.util._
  * @tparam T2
  * @tparam T3
  */
-class JoinReg[T1 <: Data, T2 <: Data, T3 <: Data]
-(typ1: T1, typ2: T2, init3: T3, ro: Boolean, join: (T1, T2) => T3)
-(implicit conf: ClickConfig) extends Module {
+class JoinReg[T1 <: Data, T2 <: Data, T3 <: Data](typ1: T1, typ2: T2, init3: T3, ro: Boolean)
+                                                 (join: (T1, T2) => T3)
+                                                 (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in1 = new ReqAck(typ1)
     val in2 = new ReqAck(typ2)
@@ -32,20 +33,16 @@ class JoinReg[T1 <: Data, T2 <: Data, T3 <: Data]
   val Pc = Module(new PhaseRegister(ro))
   val reg = Module(new CustomClockRegister(init3))
 
-  Pa.io.clock := click
-  Pa.io.reset := this.reset.asAsyncReset
+  Pa.clock := click
   Pa.io.in := !Pa.io.out
 
-  Pb.io.clock := click
-  Pb.io.reset := this.reset.asAsyncReset
+  Pb.clock := click
   Pb.io.in := !Pb.io.out
 
-  Pc.io.clock := click
-  Pc.io.reset := this.reset.asAsyncReset
+  Pc.clock := click
   Pc.io.in := !Pc.io.out
 
-  reg.io.clock := click
-  reg.io.reset := this.reset.asAsyncReset
+  reg.clock := click
   reg.io.in := join(io.in1.data, io.in2.data)
 
   io.out.data := reg.io.out
@@ -65,6 +62,6 @@ object JoinReg {
    * @return
    */
   def apply(widthIn: Int, defaultOut: Int, ro: Boolean)(implicit conf: ClickConfig): JoinReg[UInt, UInt, UInt] = {
-    new JoinReg(UInt(widthIn.W), UInt(widthIn.W), defaultOut.U((2*widthIn).W), ro, (a: UInt, b: UInt) => Cat(a,b))
+    new JoinReg(UInt(widthIn.W), UInt(widthIn.W), defaultOut.U((2*widthIn).W), ro)((a,b) => Cat(a,b))
   }
 }

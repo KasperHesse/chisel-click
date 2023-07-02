@@ -16,7 +16,9 @@ import chisel3._
  * @tparam T2
  * @tparam T3
  */
-class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: T3, fork: T1 => (T2, T3))(implicit conf: ClickConfig) extends Module {
+class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: T3)
+                                              (fork: T1 => (T2, T3))
+                                              (implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   val io = IO(new Bundle {
     val in = new ReqAck(typIn)
     val out1 = Flipped(new ReqAck(typOut1))
@@ -26,8 +28,7 @@ class Fork[T1 <: Data, T2 <: Data, T3 <: Data](typIn: T1, typOut1: T2, typOut2: 
   val click = (!io.in.ack && io.out2.ack && io.out1.ack) || (io.in.ack && !io.out2.ack && !io.out1.ack)
 
   val phase = Module(new PhaseRegister(false))
-  phase.io.clock := click.asClock
-  phase.io.reset := this.reset.asAsyncReset
+  phase.clock := click.asClock
   phase.io.in := !phase.io.out
 
   io.in.ack := phase.io.out
@@ -49,6 +50,6 @@ object Fork {
    * @return
    */
   def apply[T <: Data](typ: T)(implicit conf: ClickConfig): Fork[T, T, T] = {
-    new Fork(typ, typ, typ, (a: T) => (a, a))
+    new Fork(typ, typ, typ)(a => (a, a))
   }
 }

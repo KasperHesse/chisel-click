@@ -36,7 +36,7 @@ class InputSync extends Module {
   io.out.ack := ack
 }
 
-class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
+class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module with RequireAsyncReset {
   def dtype() = new Bundle2(UInt(dataWidth.W), UInt(dataWidth.W))
   val io = IO(new Bundle {
     val in = new ReqAck(dtype())
@@ -98,8 +98,6 @@ class GCD(dataWidth: Int)(implicit conf: ClickConfig) extends Module {
   MX0.io.in2 <> ME0.io.out
 
   io.out <> DX0.io.out1
-
-  R0.io.reset := this.reset.asAsyncReset
 }
 
 class GCDTop extends Module {
