@@ -25,9 +25,9 @@ to another consumer. Assuming 16-bit inputs, the `Fork` module is instantiated a
 val f = Module(new Fork(
   typIn=UInt(16.W), 
   typOut1=UInt(4.W), 
-  typOut2=UInt(12.W), 
-  fork=(x: UInt) => (x(15,12), x(11,0))
-))
+  typOut2=UInt(12.W))
+  (fork=(x: UInt) => (x(15,12), x(11,0)))
+)
 ```
 Here, the parameters indicate that the input is a 16-bit UInt, the first output is a 4-bit UInt and the
 second output a 12-bit UInt. The parameter `fork` is a function which implements the forking behavior.
@@ -53,12 +53,15 @@ on the Xilinx synthesis attribute `rloc` to be implemented correctly.
 The asynchronous circuit components have been tested using [cocotb](https://github.com/cocotb/cocotb/) and
 [Icarus Verilog](http://iverilog.icarus.com/).
 
-To run a test in a directory under `src/test/python`, execute
+Cocotb tests are located in `src/test/python`. To run a specific test, execute
 ```
 make single TESTNAME=<testname>
 ```
-To execute all tests, simply run `make test`. Before running the tests, be sure to execute `make gen`
-to generate the Verilog files that are tested.
+while in the root directory of the project. To execute all tests, simply run `make test`. 
+Before running the tests, be sure to execute `make gen` to generate the Verilog files that are tested.
+
+In addition to testing all circuit components with cocotb, a method for testing asynchronous circuits in ChiselTest,
+an otherwise synchronous-only framework, has been implemented. This is found in `src/test/scala/click/HandshakeTesting.scala`
 
 Sources
 ===

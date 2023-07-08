@@ -26,4 +26,4 @@ dir:
 
 .PHONY: single
 single:
-	$(MAKE) -k -C src/test/python/tests/$(TESTNAME) WORKDIR=$(CURDIR)
+	$(MAKE) -C src/test/python/tests/$(TESTNAME) WORKDIR=$(CURDIR)

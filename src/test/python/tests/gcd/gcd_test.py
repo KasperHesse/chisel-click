@@ -69,60 +69,60 @@ async def check_in_req(dut):
     await toggle(dut.io_in_req)
     await Timer(30, "ns")
     await toggle(dut.io_in_req)
-#
-# @cocotb.test()
-# async def gcd_4_2(dut):
-#     """It should compute the GCD of 4 and 2"""
-#     await reset(dut)
-#     await compute_gcd(dut, 4, 2)
-#
-#
-# @cocotb.test()
-# async def gcd_5_15(dut):
-#     """It should compute the GCD of 5 and 15"""
-#     await reset(dut)
-#     await compute_gcd(dut, 5, 15)
-#
-#
-# @cocotb.test()
-# async def multiple_gcd(dut):
-#     """It should compute multiple GCD's in a row"""
-#     await reset(dut)
-#     await compute_gcd(dut, 9, 12)
-#     await compute_gcd(dut, 42, 16)
-#     await compute_gcd(dut, 42, 18)
-#
-#
-# @cocotb.test()
-# async def await_completion(dut):
-#     """It should not take in new inputs before outputs have been generated"""
-#     await reset(dut)
-#     dut.io_in_data_a.value = 18
-#     dut.io_in_data_b.value = 15
-#     await toggle(dut.io_in_req)
-#     await Edge(dut.io_in_ack)
-#     await Timer(2, "ns")
-#
-#     # Once acknowledged, we change the input data already
-#     # Should not impact the output
-#     dut.io_in_data_a.value = 6
-#     dut.io_in_data_b.value = 4
-#     await toggle(dut.io_in_req)
-#
-#     # Await the output
-#     await Edge(dut.io_out_req)
-#     await Timer(1)
-#     assert dut.io_out_data_a == gcd(18, 15)
-#     assert dut.io_out_data_b == gcd(18, 15)
-#     # Input-ack should still be high, as it hasn't taken in new data yet
-#     assert dut.io_in_ack.value == 1
-#     await Timer(1, "ns")
-#     # Acknowledge first data received
-#     await toggle(dut.io_out_ack)
-#     # Now, wait for next data to be received
-#     await Edge(dut.io_out_req)
-#     await Timer(1)
-#     assert dut.io_out_data_a == gcd(6, 4)
-#     assert dut.io_out_data_b == gcd(6, 4)
-#     await Timer(2, "ns")
+
+@cocotb.test()
+async def gcd_4_2(dut):
+    """It should compute the GCD of 4 and 2"""
+    await reset(dut)
+    await compute_gcd(dut, 4, 2)
+
+
+@cocotb.test()
+async def gcd_5_15(dut):
+    """It should compute the GCD of 5 and 15"""
+    await reset(dut)
+    await compute_gcd(dut, 5, 15)
+
+
+@cocotb.test()
+async def multiple_gcd(dut):
+    """It should compute multiple GCD's in a row"""
+    await reset(dut)
+    await compute_gcd(dut, 9, 12)
+    await compute_gcd(dut, 42, 16)
+    await compute_gcd(dut, 42, 18)
+
+
+@cocotb.test()
+async def await_completion(dut):
+    """It should not take in new inputs before outputs have been generated"""
+    await reset(dut)
+    dut.io_in_data_a.value = 18
+    dut.io_in_data_b.value = 15
+    await toggle(dut.io_in_req)
+    await Edge(dut.io_in_ack)
+    await Timer(2, "ns")
+
+    # Once acknowledged, we change the input data already
+    # Should not impact the output
+    dut.io_in_data_a.value = 6
+    dut.io_in_data_b.value = 4
+    await toggle(dut.io_in_req)
+
+    # Await the output
+    await Edge(dut.io_out_req)
+    await Timer(1)
+    assert dut.io_out_data_a == gcd(18, 15)
+    assert dut.io_out_data_b == gcd(18, 15)
+    # Input-ack should still be high, as it hasn't taken in new data yet
+    assert dut.io_in_ack.value == 1
+    await Timer(1, "ns")
+    # Acknowledge first data received
+    await toggle(dut.io_out_ack)
+    # Now, wait for next data to be received
+    await Edge(dut.io_out_req)
+    await Timer(1)
+    assert dut.io_out_data_a == gcd(6, 4)
+    assert dut.io_out_data_b == gcd(6, 4)
+    await Timer(2, "ns")
 

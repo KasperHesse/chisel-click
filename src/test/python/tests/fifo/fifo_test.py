@@ -7,14 +7,14 @@ from cocotb.triggers import RisingEdge, FallingEdge
 async def my_first_test(dut):
     """We attempt to drive stuff onto the DUT"""
     # Reset and setup
-    dut.io_reset.value = 1
+    dut.reset.value = 1
     dut.io_in_req.value = 0
     dut.io_in_data.value = 8
     dut.io_out_ack.value = 0
     # Take reset down
 
     await Timer(1, units="ns")
-    dut.io_reset.value = 0
+    dut.reset.value = 0
     await Timer(1, units="ns")
 
     # Poke in.req high, wait for out.req
@@ -32,14 +32,14 @@ async def my_first_test(dut):
 async def req_low_no_ack(dut):
     """Taking in.req low while in.ack has not become 1 should cause out.req to stay high"""
     # Reset and setup
-    dut.io_reset.value = 1
+    dut.reset.value = 1
     dut.io_in_req.value = 0
     dut.io_in_data.value = 8
     dut.io_out_ack.value = 0
     # Take reset down
 
     await Timer(1, units="ns")
-    dut.io_reset.value = 0
+    dut.reset.value = 0
     await Timer(1, units="ns")
 
     # Poke in.req high, wait for out.req
